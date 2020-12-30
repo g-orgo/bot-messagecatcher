@@ -95,7 +95,7 @@ bot.on('chat', (channel, user, message, self) =>{
                 clearChat();
                 bot.say(chName, `Chat limpo. ;)`)
             } else [
-                bot.say(chName, `@${user.username}, infelizmente este é um comando de uso restrito.`)
+                bot.say(chName, `@${user.username}, infelizmente este é um comando de restrito.`)
             ]
             
             onCooldown.add('true')
