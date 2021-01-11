@@ -1,6 +1,7 @@
 const SpotifyWebApi = require('spotify-web-api-node');
 const express = require('express');
 
+// First you'll set the scopes you want to change/handle
 spotifyscopes = [
     'ugc-image-upload',
     'user-read-playback-state',
@@ -24,7 +25,7 @@ spotifyscopes = [
 
 
 
-//Setting up spotify settings and grant acess to the bot.
+// Setting up spotify and express variables.
 var spotifyApi = new SpotifyWebApi({
     clientId: '1ad304bde0594efc8d660937c4018167',
     clientSecret: '4380dfbc0cea436aa134687cb8699d73',
@@ -34,6 +35,7 @@ var spotifyApi = new SpotifyWebApi({
 const exp = express();
 
 exp.get('/login', (req, res) => {
+    // This will only works if you haven't authorizate the bot with your account yet.
     res.redirect(spotifyApi.createAuthorizeURL(spotifyscopes));
 });
 
@@ -47,6 +49,7 @@ exp.get('/callback', (req, res) =>{
     const code = req.query.code;
     
 
+    // This is the easier code flow i learned at "https://github.com/thelinmichael/spotify-web-api-node".
     spotifyApi.authorizationCodeGrant(code).then(data => {
         const access_token = data.body['access_token']
         const refresh_token = data.body['refresh_token'];
@@ -56,7 +59,7 @@ exp.get('/callback', (req, res) =>{
         spotifyApi.setRefreshToken(refresh_token);
 
         console.log(`Spotify token expires in: ${data.body.expires_in}\n`)
-        console.log(`Hello, here's your token:\n\n ${access_token}`)
+        console.log(`Hello, here's your token:\n\n ${access_token}\n\n It will be refreashed in 1hour`)
 
         res.send('Success! You can now close the window.');
 
