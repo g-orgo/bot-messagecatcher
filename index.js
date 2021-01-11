@@ -1,6 +1,7 @@
 // Calling up TMI and Spotify api.
 const twitchApi = require('tmi.js');
-const spotifyApi = require('spotify-web-api-node');
+const SpotifyWebApi = require('spotify-web-api-node');
+const request = require('request');
 
 // I'm creating this section of variables to make channel bind and other functions easier.
 const chName = 'caruso323';
@@ -19,9 +20,10 @@ const socialMediaInfo = {
 };
  */
 const commandsInfo = [
-    ' !cls (ou clear | tempo de recarga: 10s)', 
-    ' !instagram(ou ig)', 
-    ' !youtube(ou yt)',
+    ' !cls (ou clear | tempo de recarga: 10s **Comando de administrador)', 
+    ' !instagram(ou !ig)', 
+    ' !youtube(ou !yt)',
+    ' !music_p(ou !play | **Comando de administrador)',
 ];
 
 // Telling to messagecatcherbot what "time" is.
@@ -36,9 +38,9 @@ function dateTime(){
     today = '[ ' + dd + '/' + mm + '/' + yyyy + " | " + hh + ':' + min + ':' + ss + ' ]'
     return today
 }
-setInterval(dateTime, 1000)
+setInterval(dateTime, 1000) //This will refresh the time second after second.
 
-//This will create a scope to eventually set any cooldown time to the command.
+// Create a scope to eventually set any cooldown time to the command.
 const onCooldown = new Set();
 
 /* Setting debug state on and the channels list. 
@@ -60,40 +62,49 @@ const settings = {
     ]
 };
 
-var spotifySettings = new spotifyApi({
-    clientId: '1ad304bde0594efc8d660937c4018167',
-    clientSecret: '4380dfbc0cea436aa134687cb8699d73',
-    redirectUri: 'http://localhost/'
-  });
-
- //Actually creating the bot and connecting it. 
+//Actually creating the bot and connecting it. 
 const bot = new twitchApi.client(settings);
-bot.connect();
+bot.connect().catch(function(err){
+    console.log(err)
+})
+//Setting up spotifyAPI variable and token.
+var spotifyApi = new SpotifyWebApi();
+var spotifyAuthorizationCode = "BQDpG0-rwgJFdDegi91t5hWg6MF6zMB19HXvVYu0LZhLtlNIvzW5N_LRFr2K5iVSpk-PrHWE2-zxqvluL2lRj37Q5s0J_-ir1TJf2R68D6WTLvlPqfhrMHhhYb3n1KnA2Htm_GAvZswDzGs6oaUSHVIBz7XbdvucdUVpREVPHTb0cLE4Qoed0VZREdM_nCPPuVvEISVrxDvOThkITtihRY7PQWcuoaAEIRWcRxGGtiVhiRDoJY5-gBmJ-SU07VOBB46SjStB344h0GnO1tYKlJ0avbA"
 
 // Send a message when connected.
 bot.on('connected', (adress, port) => {
-    bot.action(chName, 'Inicializando sistema...');
-    console.log(`${dateTime()} - Connected to ${adress}, port ${port}... OK`);
+    console.log(`${dateTime()} - MessageCatcher bot is now on.. OK`);
+    
+    /* (async () => {
+        spotifyApi.setAccessToken(spotifyAuthorizationCode);
+        const me = await spotifyApi.getMe();
+        console.log(me)
+    })().catch(e => {
+        console.error(e)
+    }) */
+    
 });
-
 
 //ONLY CHAT COMMANDS
 bot.on('chat', (channel, user, message, self) =>{
     //It turns all kind of alternatives for "message" understandable.
     var messageSensitiveLess = message.toLowerCase();
 
+    //Command to clear screen
     if (messageSensitiveLess === '!cls' || messageSensitiveLess === '!clear'){
         // Cooldown loop
         if (onCooldown.has('true')){
             bot.say(chName, `Comando em tempo de recarga, aguarde uns segundos antes de tentar novamente.`)
-        } else {
+        }else {
             // Doing a permission's loop for only staff commands.
             if (user.badges === null) {
                 bot.say(chName, `@${user.username}, infelizmente este é um comando de uso restrito.`);
             } else if (user.mod === true || user.badges['broadcaster'] === '1'){
                 // Here goes the only staff commands.
-                clearChat();
+                
+                bot.clear(chName); // It cleans chat messages.
                 bot.say(chName, `Chat limpo. ;)`)
+                console.log(`${dateTime()} - Chat was cleared by: ${user.username}. At "${channel}" channel... OK`)
             } else [
                 bot.say(chName, `@${user.username}, infelizmente este é um comando de restrito.`)
             ]
@@ -103,12 +114,38 @@ bot.on('chat', (channel, user, message, self) =>{
                 onCooldown.delete('true')
             }, 10000) // Here we'll set the time we want to the command in ms.
         };
-    
-        function clearChat(){
-            // It cleans chat messages.
-            bot.clear(chName);
-            console.log(`${dateTime()} - Chat was cleared by: ${user.username}. At "${channel}" channel... OK`)
-        };
+    }
+
+    if (messageSensitiveLess === '!music_p' || messageSensitiveLess === '!play'){
+
+        if (onCooldown.has('true')){
+            bot.say(chName, `Comando em tempo de recarga, aguarde uns segundos antes de tentar novamente.`)
+        }else{
+            if (user.badges === null) {
+                bot.say(chName, `@${user.username}, infelizmente este é um comando de uso restrito.`);
+            } else if (user.mod === true || user.badges['broadcaster'] === '1'){
+                (async () => {
+                    spotifyApi.setAccessToken(spotifyAuthorizationCode);
+                    const playingState = await spotifyApi.getMyCurrentPlaybackState();
+                    if(playingState.body.is_playing == false){
+                        await spotifyApi.play();
+                    }else[
+                        await spotifyApi.pause()
+                    ]
+                })().catch(e => {
+                    console.error(e)
+                })
+                console.log(`${dateTime()} - Chat was cleared by: ${user.username}. At "${channel}" channel... OK`)
+            } else [
+                bot.say(chName, `@${user.username}, infelizmente este é um comando de restrito.`)
+            ]
+
+            onCooldown.add('true')
+            setTimeout(()=>{
+                onCooldown.delete('true')
+            }, 3000)
+
+        }
     }
 });
 
