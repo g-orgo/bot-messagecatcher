@@ -62,15 +62,18 @@ bot.connect().catch(function(err){
 })
 //Setting up spotifyAPI variable and token.
 var spotifyApi = new SpotifyWebApi();
-var spotifyAuthorizationCode = "BQAYfhrgLElOfyn0lllWZgKW5ZA53arlIqp4hi8vOqXTr_ogRXa7SHTw9zFiOJKe9XdBax2VrPCJZiESQ_lQKI1z2dnRH_fw7rJ_v4SxeDKOw--_aHgmyCkhBU-W0ocsA-T0DP2SeePArRguTqgBF1DFdyM6Iui9ZSK3Y7FlGyp6gESkFJ-3VqBqZVcgcDh59qup7eSBvrNFl2byX3ItXazjT5J5DVTeBpAppFQa2NcyEo9h6NldkgwLU7ltL-kZHnLjd6DxW6zoaqvF1UiTo0zl"
+var spotifyAuthorizationCode = "BQA0S2stg1YomCiN_jVP4CJj85bRE3VD6xTnk25xwLy0aEIEDHCfljSDcjXxkdtfN4QhatkVys4F1gUkL-5Wpyfe_jPGNahg2HnwEtpUF8t90IAgcuXjx92r1KSkMx8VcB8OhsLAxEc2mWJYOpXWlaCTTOqZx6Dqk9OeBXr4gEjX8ZcCdUv6wFX-soFmBzShZZ1BAykPBou7u5g9CQqVbZX3HxabztXMIC0WxGvdYOZCreeGyXak2MJRHsFRGrTkcIyBE26EELu_hz6bNY5l3OnhpXM"
 
 // Send a message when connected.
 bot.on('connected', (adress, port) => {
-    console.log(`${dateTime()} - MessageCatcher bot is now on.. OK`);  
+    console.log(`\n\n${dateTime()} - MessageCatcher bot is now on.. OK`);  
 });
 
 // ONLY CHAT COMMANDS
 bot.on('chat', (channel, user, message, self) =>{
+    if (self) return
+
+
     //It turns all kind of alternatives for "message" understandable.
     var messageSensitiveLess = message.toLowerCase();
 
@@ -88,7 +91,7 @@ bot.on('chat', (channel, user, message, self) =>{
                 
                 bot.clear(chName); // It cleans chat messages.
                 bot.say(chName, `Chat limpo. ;)`)
-                console.log(`${dateTime()} - Chat was cleared by: ${user.username}. At "${channel}" channel... OK`)
+                console.log(`\n\n${dateTime()} - Chat was cleared by: ${user.username}. At "${channel}" channel... OK`)
             } else [
                 bot.say(chName, `@${user.username}, infelizmente este é um comando de restrito.`)
             ]
@@ -120,8 +123,7 @@ bot.on('chat', (channel, user, message, self) =>{
                 })().catch(e => {
                     console.error(e)
                 });
-
-                console.log(`${dateTime()} - ${user.username} stopped/resume the music at "${channel}" channel... OK`);
+                console.log(`\n\n${dateTime()} - ${user.username} stopped/resume the music at "${channel}" channel... OK`);
             } else [
                 bot.say(chName, `@${user.username}, infelizmente este é um comando de restrito.`)
             ]
@@ -135,11 +137,9 @@ bot.on('chat', (channel, user, message, self) =>{
 
     // Command to change sound volume.
     if (messageSensitiveLess.includes('!vol')){
-        if (user.badges === null) {
-            bot.say(chName, `@${user.username}, infelizmente este é um comando de uso restrito.`);
-        } else if (user.mod === true || user.badges['broadcaster'] === '1'){
+        if (user.mod === true || user.badges['broadcaster'] === '1'){
 
-        var s = messageSensitiveLess.slice(5);
+        var s = messageSensitiveLess.slice(4);
 
         if (s == "up"){
             (async () => {
@@ -154,7 +154,7 @@ bot.on('chat', (channel, user, message, self) =>{
             })().catch(e => {
                 console.error(e)
             })
-            console.log(`${dateTime()} - ${user.username} increased the volume at "${channel}" channel... OK`);
+            console.log(`\n\n${dateTime()} - ${user.username} increased the volume at "${channel}" channel... OK`);
         }else if (s == "down"){
             (async () => {
                 spotifyApi.setAccessToken(spotifyAuthorizationCode);
@@ -164,19 +164,18 @@ bot.on('chat', (channel, user, message, self) =>{
                 } else [
                     await spotifyApi.setVolume(volumePorcent - 10)
                 ]
-                
             })().catch(e => {
                 console.error(e)
             })
-            console.log(`${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`);
-        }else[
+            console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`);
+        }else [
             (async () => {
                 spotifyApi.setAccessToken(spotifyAuthorizationCode);
                 await spotifyApi.setVolume(parseInt(s));
             })().catch(e => {
                 console.error(e);
             }),
-            console.log(`${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`)
+            console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`)
         ]}else [
             bot.say(chName, `@${user.username}, infelizmente este é um comando de restrito.`)
         ]
@@ -185,39 +184,64 @@ bot.on('chat', (channel, user, message, self) =>{
     if(messageSensitiveLess.includes('!sr')){
         var s = messageSensitiveLess.slice(4);
 
-        (async () => {
-            spotifyApi.setAccessToken(spotifyAuthorizationCode);
-            var songRequested = await (await (spotifyApi.searchTracks(s))).body.tracks.342[0]
+        if (messageSensitiveLess.slice(3,4) == " "){
+            (async () => {
+                spotifyApi.setAccessToken(spotifyAuthorizationCode);
 
-            await spotifyApi.addToQueue([songRequested.uri])
-            console.log(`${dateTime()} - ${user.username} requested a song (${songRequested.name} - ${songRequested}) at "${channel}" channel... OK`)
-        })().catch(e => {
-            console.error(e)
-        })
+                var songArray = []
+                var count = 0
+                const songList = await (await (spotifyApi.searchTracks(s))).body.tracks.items
+    
+                while (songArray.length < 5){
+                    songArray.push(` [${count+1}]${songList[count].name} - ${songList[count].artists[0].name}`)
+                    ++count
+                }
+    
+                bot.say(chName, `Achei isso no spotify: ${songArray}. Agora tu acrescenta o número escolhido depois do !sr (exemplo: !sr1 ${s})"`)
+            })().catch(e => {
+                console.error(e)
+            })
+        }else {
+            var sInt = parseInt(messageSensitiveLess.slice(3,4));
+            (async () => {
+                spotifyApi.setAccessToken(spotifyAuthorizationCode);
+                
+                const songRequested = await (await (spotifyApi.searchTracks(s))).body.tracks.items[sInt-1]
+                await spotifyApi.addToQueue([songRequested.uri])
+
+                console.log(`\n\n${dateTime()} - ${user.username} requested a song (${songRequested.name} - ${songRequested.artists[0].name}) at "${channel}" channel... OK`)
+                bot.say(chName, `Prontinho. ${songRequested.name} - ${songRequested.artists[0].name} foi adicionada à fila de reprodução!`)
+            })().catch(e => {
+                console.error(e)
+            });
+        }
     }
+
+    
 });
 
 // ALL KIND O' MESSAGE COMMANDS
 bot.on('message', (channel, userstate, message, self) =>{
+    if (self) return
     // It turns all kind of alternatives for "message" understandable.
     var message = message.toLowerCase();
 
     // A social media function, when someone send a message with social media names it returns my link or identification on it.
     if (message === '!instagram' || message === '!ig') {
         bot.say(chName, `O instagram dele é: ${socialMediaInfo['instagram']}.`);
-        console.log(`${dateTime()} - A social media(instagram) message was send at ${channel} to @${userstate.username}... OK`);
+        console.log(`\n\n${dateTime()} - A social media(instagram) message was send at ${channel} to @${userstate.username}... OK`);
     } else if (message === '!youtube' || message === '!yt'){
         bot.say(chName, `O canal no youtube dele é "${socialMediaInfo['youtube']}", mas você pode acessar clicando aqui 👇 ${socialMediaInfo['youtube_link']}`);
-        console.log(`${dateTime()} - A social media(youtube) message was send at ${channel} to @${userstate.username}... OK`);
+        console.log(`\n\n${dateTime()} - A social media(youtube) message was send at ${channel} to @${userstate.username}... OK`);
     };
 
     // Command to computerize ganks (debug reasons only).
     if (message.includes('gank') || message.includes('raid')) {
-        console.log(`${dateTime()} - You've receive a gank/raid at: "${channel} channel".`);
+        console.log(`\n\n${dateTime()} - You've receive a gank/raid at: "${channel} channel".`);
     };
 
     if (message === '!help' || message === '!ajuda' || message === '!commands' || message === '!comandos'){
         bot.say(chName, `Estes são os comandos que eu tenho até o momento: ${commandsInfo}`);
-        console.log(`${dateTime()} - Someone's asking for some help at "${channel} channel".`);
+        console.log(`\n\n${dateTime()} - Someone's asking for some help at "${channel} channel".`);
     };
 });
