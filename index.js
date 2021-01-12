@@ -1,22 +1,19 @@
 // Calling up TMI and Spotify api.
 const twitchApi = require('tmi.js');
 const SpotifyWebApi = require('spotify-web-api-node');
-const request = require('request');
 
 // I'm creating this section of variables to make channel bind and other functions easier.
 const chName = 'caruso323';
 const socialMediaInfo = {
-                                        'instagram': '@opaidoverde',
-                                        'youtube': 'Caruso',
-                                        'youtube_link': 'https://www.youtube.com/channel/UCnB05Yjc_yeElNk_8pVMD0A',
+    'instagram': '@opaidoverde',
+    'youtube': 'Caruso',
+    'youtube_link': 'https://www.youtube.com/channel/UCnB05Yjc_yeElNk_8pVMD0A',
 };
 
 const commandsInfo = [
-    ' !cls (ou clear | tempo de recarga: 10s **Comando de administrador)', 
-    ' !instagram (ou !ig)', 
+    ' !instagram (ou !ig)',
     ' !youtube (ou !yt)',
-    ' !music_p (ou !play | tempo de recarga: 3s **Comando de administrador)',
-    ' !vup (ou !vdwn)'
+    ' !sr < música, artista, album >'
 ];
 
 // Telling to messagecatcherbot what "time" is.
@@ -84,9 +81,7 @@ bot.on('chat', (channel, user, message, self) =>{
             bot.say(chName, `Comando em tempo de recarga, aguarde uns segundos antes de tentar novamente.`)
         }else {
             // Doing a permission's loop for only staff commands.
-            if (user.badges === null) {
-                bot.say(chName, `@${user.username}, infelizmente este é um comando de uso restrito.`);
-            } else if (user.mod === true || user.badges['broadcaster'] === '1'){
+            if (user.mod === true || user.badges['broadcaster'] === '1'){
                 // Here goes the only staff commands.
                 
                 bot.clear(chName); // It cleans chat messages.
@@ -108,10 +103,7 @@ bot.on('chat', (channel, user, message, self) =>{
         if (onCooldown.has('true')){
             bot.say(chName, `Comando em tempo de recarga, aguarde uns segundos antes de tentar novamente.`)
         }else{
-            if (user.badges === null) {
-                bot.say(chName, `@${user.username}, infelizmente este é um comando de uso restrito.`);
-            } else if (user.mod === true || user.badges['broadcaster'] === '1'){
-
+            if (user.mod === true || user.badges['broadcaster'] === '1'){
                 (async () => {
                     spotifyApi.setAccessToken(spotifyAuthorizationCode);
                     const playingState = await spotifyApi.getMyCurrentPlaybackState();
@@ -138,7 +130,6 @@ bot.on('chat', (channel, user, message, self) =>{
     // Command to change sound volume.
     if (messageSensitiveLess.includes('!vol')){
         if (user.mod === true || user.badges['broadcaster'] === '1'){
-
         var s = messageSensitiveLess.slice(4);
 
         if (s == "up"){
@@ -215,32 +206,30 @@ bot.on('chat', (channel, user, message, self) =>{
                 console.error(e)
             });
         }
-    }
-
-    
+    } 
 });
 
 // ALL KIND O' MESSAGE COMMANDS
 bot.on('message', (channel, userstate, message, self) =>{
     if (self) return
     // It turns all kind of alternatives for "message" understandable.
-    var message = message.toLowerCase();
+    var messageSensitiveLess = message.toLowerCase();
 
     // A social media function, when someone send a message with social media names it returns my link or identification on it.
-    if (message === '!instagram' || message === '!ig') {
+    if (messageSensitiveLess === '!instagram' || messageSensitiveLess === '!ig') {
         bot.say(chName, `O instagram dele é: ${socialMediaInfo['instagram']}.`);
         console.log(`\n\n${dateTime()} - A social media(instagram) message was send at ${channel} to @${userstate.username}... OK`);
-    } else if (message === '!youtube' || message === '!yt'){
+    } else if (messageSensitiveLess === '!youtube' || messageSensitiveLess === '!yt'){
         bot.say(chName, `O canal no youtube dele é "${socialMediaInfo['youtube']}", mas você pode acessar clicando aqui 👇 ${socialMediaInfo['youtube_link']}`);
         console.log(`\n\n${dateTime()} - A social media(youtube) message was send at ${channel} to @${userstate.username}... OK`);
     };
 
     // Command to computerize ganks (debug reasons only).
-    if (message.includes('gank') || message.includes('raid')) {
+    if (messageSensitiveLess.includes('gank') || messageSensitiveLess.includes('raid')) {
         console.log(`\n\n${dateTime()} - You've receive a gank/raid at: "${channel} channel".`);
     };
 
-    if (message === '!help' || message === '!ajuda' || message === '!commands' || message === '!comandos'){
+    if (messageSensitiveLess === '!help' || messageSensitiveLess === '!ajuda' || messageSensitiveLess === '!commands' || messageSensitiveLess === '!comandos'){
         bot.say(chName, `Estes são os comandos que eu tenho até o momento: ${commandsInfo}`);
         console.log(`\n\n${dateTime()} - Someone's asking for some help at "${channel} channel".`);
     };

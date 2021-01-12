@@ -23,8 +23,6 @@ spotifyscopes = [
     'user-follow-modify'
 ];
 
-
-
 // Setting up spotify and express variables.
 var spotifyApi = new SpotifyWebApi({
     clientId: '1ad304bde0594efc8d660937c4018167',
@@ -47,7 +45,6 @@ exp.listen(8888, () =>
 
 exp.get('/callback', (req, res) =>{
     const code = req.query.code;
-    
 
     // This is the easier code flow i learned at "https://github.com/thelinmichael/spotify-web-api-node".
     spotifyApi.authorizationCodeGrant(code).then(data => {
