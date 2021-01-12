@@ -62,7 +62,7 @@ bot.connect().catch(function(err){
 })
 //Setting up spotifyAPI variable and token.
 var spotifyApi = new SpotifyWebApi();
-var spotifyAuthorizationCode = "BQC7nhXZ1FXAxtYXsaE-bdOhQ0ds2Zy2ciujtodpsJYKlfOMRBb1oSnU5fG5y1PUT1f3IP07eo7J_bqoczv00x5JxuwFm_oDEMVtf1Z7PsGbDEHwziJ_7Q0d8Yh1RYcUxvcw_EeGpyD2s9V3aCR1orVvpEzwIbz1hpe5GJXkdpZgzKbE5k4OP01bxwn9QnuEDD80OjENUa3uA7DQOjFuOXY599MxNkuBYSSud1LkDbrO-9kmeZqMo9ERMQpab9Gfl56_QLntBYtU5CUvtcrp86e7"
+var spotifyAuthorizationCode = "BQAYfhrgLElOfyn0lllWZgKW5ZA53arlIqp4hi8vOqXTr_ogRXa7SHTw9zFiOJKe9XdBax2VrPCJZiESQ_lQKI1z2dnRH_fw7rJ_v4SxeDKOw--_aHgmyCkhBU-W0ocsA-T0DP2SeePArRguTqgBF1DFdyM6Iui9ZSK3Y7FlGyp6gESkFJ-3VqBqZVcgcDh59qup7eSBvrNFl2byX3ItXazjT5J5DVTeBpAppFQa2NcyEo9h6NldkgwLU7ltL-kZHnLjd6DxW6zoaqvF1UiTo0zl"
 
 // Send a message when connected.
 bot.on('connected', (adress, port) => {
@@ -100,7 +100,7 @@ bot.on('chat', (channel, user, message, self) =>{
         };
     }
 
-    // Command to increase music volume.
+    // Command to pause/resume music.
     if (messageSensitiveLess === '!music_p' || messageSensitiveLess === '!play'){
         if (onCooldown.has('true')){
             bot.say(chName, `Comando em tempo de recarga, aguarde uns segundos antes de tentar novamente.`)
@@ -119,9 +119,9 @@ bot.on('chat', (channel, user, message, self) =>{
                     ]
                 })().catch(e => {
                     console.error(e)
-                })
+                });
 
-                console.log(`${dateTime()} - ${user.username} stopped/resume the music at "${channel}" channel... OK`)
+                console.log(`${dateTime()} - ${user.username} stopped/resume the music at "${channel}" channel... OK`);
             } else [
                 bot.say(chName, `@${user.username}, infelizmente este é um comando de restrito.`)
             ]
@@ -129,42 +129,71 @@ bot.on('chat', (channel, user, message, self) =>{
             onCooldown.add('true')
             setTimeout(()=>{
                 onCooldown.delete('true')
-            }, 3000)
+            }, 3000);
         }
     }
 
-    // Command to decrease music volume.
-    if (messageSensitiveLess === '!music_volup' || messageSensitiveLess === '!vup'){
-        (async () => {
-            spotifyApi.setAccessToken(spotifyAuthorizationCode);
-            var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
-            
-            if(volumePorcent > 90){
-                bot.say(chName, `O volume já está em 100%`);
-            } else [
-                await spotifyApi.setVolume(volumePorcent + 10)
-            ]
-            
-        })().catch(e => {
-            console.error(e)
-        })
-        console.log(`${dateTime()} - ${user.username} increased the volume at "${channel}" channel... OK`)
+    // Command to change sound volume.
+    if (messageSensitiveLess.includes('!vol')){
+        if (user.badges === null) {
+            bot.say(chName, `@${user.username}, infelizmente este é um comando de uso restrito.`);
+        } else if (user.mod === true || user.badges['broadcaster'] === '1'){
+
+        var s = messageSensitiveLess.slice(5);
+
+        if (s == "up"){
+            (async () => {
+                spotifyApi.setAccessToken(spotifyAuthorizationCode);
+                var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
+                
+                if(volumePorcent > 90){
+                    bot.say(chName, `O volume já está em 100%`);
+                } else [
+                    await spotifyApi.setVolume(volumePorcent + 10)
+                ]
+            })().catch(e => {
+                console.error(e)
+            })
+            console.log(`${dateTime()} - ${user.username} increased the volume at "${channel}" channel... OK`);
+        }else if (s == "down"){
+            (async () => {
+                spotifyApi.setAccessToken(spotifyAuthorizationCode);
+                var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
+                if(volumePorcent < 10){
+                    bot.say(chName, `O volume já está em 0%`);
+                } else [
+                    await spotifyApi.setVolume(volumePorcent - 10)
+                ]
+                
+            })().catch(e => {
+                console.error(e)
+            })
+            console.log(`${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`);
+        }else[
+            (async () => {
+                spotifyApi.setAccessToken(spotifyAuthorizationCode);
+                await spotifyApi.setVolume(parseInt(s));
+            })().catch(e => {
+                console.error(e);
+            }),
+            console.log(`${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`)
+        ]}else [
+            bot.say(chName, `@${user.username}, infelizmente este é um comando de restrito.`)
+        ]
     }
 
-    if (messageSensitiveLess === '!music_voldwn' || messageSensitiveLess === '!vdwn'){
+    if(messageSensitiveLess.includes('!sr')){
+        var s = messageSensitiveLess.slice(4);
+
         (async () => {
             spotifyApi.setAccessToken(spotifyAuthorizationCode);
-            var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
-            if(volumePorcent < 10){
-                bot.say(chName, `O volume já está em 0%`);
-            } else [
-                await spotifyApi.setVolume(volumePorcent - 10)
-            ]
-            
+            var songRequested = await (await (spotifyApi.searchTracks(s))).body.tracks.342[0]
+
+            await spotifyApi.addToQueue([songRequested.uri])
+            console.log(`${dateTime()} - ${user.username} requested a song (${songRequested.name} - ${songRequested}) at "${channel}" channel... OK`)
         })().catch(e => {
             console.error(e)
         })
-        console.log(`${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`)
     }
 });
 
