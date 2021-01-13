@@ -21,19 +21,19 @@ First i'm gonna talk a little about the twitchAPI (aka TMIJS). If you're not fam
 
 ### OAUTH FLOW
 
-```
+```js
 const tmi = require('tmi.js');
 
-const client = new tmi.Client({ (I prefer to call this "client", bot.)
+const client = new tmi.Client({ // I prefer to call this "client", bot.
 	options: { debug: true },
 	connection: {
 		reconnect: true
 	},
 	identity: {
 		username: '<YOUR_BOT_USERNAME>',
-		password: '<YOUR_OAUTH_TOKEN>'  (And yes, you need to mantain the "oauth:")
+		password: '<YOUR_OAUTH_TOKEN>'  // And yes, you need to mantain the "oauth:"
 	},
-	channels: [ 'my_name' ]  (As you can see at my index.js file i opted for use a variable here, but it fits too)
+	channels: [ 'my_name' ]  // As you can see at my index.js file i opted for use a variable here, but it fits too
 });
 
 client.connect();
