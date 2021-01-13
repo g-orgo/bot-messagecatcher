@@ -16,6 +16,8 @@ Simple as it seems, go through this documentation and don't forget to check if y
 		* [permissions, scopes](https://github.com/g-orgo/bot-messagecatcher/tree/master#permissions-scopes)
 	- [1.2 commands](https://github.com/g-orgo/bot-messagecatcher/tree/master#12-commands)
 		* [d.r.y](https://github.com/g-orgo/bot-messagecatcher/tree/master#dry)
+		* [staff commands](https://github.com/g-orgo/bot-messagecatcher/tree/master#staff-commands)
+		* [cooldown](https://github.com/g-orgo/bot-messagecatcher/tree/master#cooldown)
 
 
 
@@ -109,4 +111,103 @@ This will prevent your bot of activate a command by it own calling. For example 
 	bot.say(chName, `I've found this: ${songArray}. Now you need to retrieve the chosen number just after !sr (example: !sr1 ${s})`)
 ```
 
-The idea here is that you use "!sr <Artist, Album, Song>" to create a list of 5 items spotify searched for and then you use the same command but with the id of the song you want. Simple, right? Yea! but if i haven't use "dry function" this _example_ should activate the code, even if was the bot who said it.
+The idea here is that you use "!sr <Artist, Album, Song>" to create a list of 5 items spotify searched for and then you use the same command but with the id of the song you want. Simple, right? Yea! but if i haven't use "dry function" this _example_ should activate the code, even if was the bot who said it. You can also create a variable inside your chat/message scope to messages become easier to catch.
+
+```js
+
+	var messageSensitiveLess = message.toLowerCase();
+
+```
+
+### Staff commands
+
+For the only-staff loop idea i did a very messy code, after going for like 2 nights of tests i finally found out this:
+
+```js
+
+	if (user.badges == null){
+
+		// Not staff message.
+
+	}else if (user.mod === true || user.badges['broadcaster'] === '1'){
+		// Here goes the only staff commands.
+		
+		
+	} else [
+
+		// Not staff message.
+
+	]
+
+```
+
+You might be thinking why i did this ``` if (user.badges == null) ``` when i've already called  ```else```. Like, if someone has no "broadcaster" or even "mod" badge it should not be a staff-user, right? Well... you're right. But, what twitchAPI will shows up if you don't use this first line is that "you can't read 'null'". If you call for something like this 
+
+```js
+
+	if (user.badges == null){
+
+		// Not staff message.
+
+	}else [
+
+		if (user.mod === true || user.badges['broadcaster'] === '1'){
+
+		// Here goes the only staff commands.
+				
+		}else [
+
+			// Not staff message.
+
+		]
+	]
+
+```
+
+Should work too, but i didn't test it.
+
+### Cooldown
+
+When i started my cooldown feature i decided that this should work with _time_, so i did it. I teached time to the bot.
+
+```js
+
+function dateTime(){
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = String(today.getFullYear());
+    var hh = String(today.getHours()).padStart(2, '0');
+    var min = String(today.getMinutes()).padStart(2, '0');
+    var ss = String(today.getSeconds()).padStart(2, '0');
+    today = '[ ' + dd + '/' + mm + '/' + yyyy + " | " + hh + ':' + min + ':' + ss + ' ]'
+    return today
+}
+setInterval(dateTime, 1000)
+
+```
+
+But i quickly changed my mind when i found this "set kind" to create it.
+
+```js
+
+	const onCooldown = new Set(); // This go out of any scope.
+
+
+	if (onCooldown.has(messageSensitiveLess)){
+
+		// On cooldown message.
+	
+	}else {
+		
+		// Your stuff.
+	
+		onCooldown.add(messageSensitiveLess)
+		setTimeout(()=>{
+			onCooldown.delete(messageSensitiveLess)
+		}, 10000) // Here we'll set the time we want to the command in ms.
+	}
+
+```
+
+In this case, first of i've tried to add a value like "true" to "onCooldown" set, but it created a problem when multiple commands was on cooldown (i didn't deleted _time_, i leave it to console logs 😋).

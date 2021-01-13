@@ -95,7 +95,7 @@ bot.on('chat', (channel, user, message, self) =>{
             
             onCooldown.add(messageSensitiveLess)
             setTimeout(()=>{
-                onCooldown.delete('true')
+                onCooldown.delete(messageSensitiveLess)
             }, 10000) // Here we'll set the time we want to the command in ms.
         };
     }
