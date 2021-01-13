@@ -17,7 +17,7 @@ I've created this bot to show some of my programming skills (job interview issue
 
 
 ## TMIJS
-First i'm gonna talk a little about the twitchAPI (aka TMIJS). If you're not familiar to authentication be safe, you can check this [TMI.JS](https://tmijs.com/#example-anonymous-connection) page. They speak about all kinds of authentication flow you can use. Also, i'll try to bring some cool examples.
+First i'm gonna show a little about the twitchAPI (aka TMIJS). If you're not familiar to authentication be safe, you can check this [TMI.JS](https://tmijs.com/#example-anonymous-connection) page. They talk about all kinds of authentication flow you can use. Also, i'll try to bring some cool examples.
 
 ### OAUTH FLOW
 
@@ -31,9 +31,9 @@ const client = new tmi.Client({ // I prefer to call this "client", bot.
 	},
 	identity: {
 		username: '<YOUR_BOT_USERNAME>',
-		password: '<YOUR_OAUTH_TOKEN>'  // And yes, you need to mantain the "oauth:"
+		password: '<YOUR_OAUTH_TOKEN>'  // And yes, you need to mantain the "oauth:".
 	},
-	channels: [ 'my_name' ]  // As you can see at my index.js file i opted for use a variable here, but it fits too
+	channels: [ '<YOUR_CHANNEL_NAME>' ]  // As you can see at my index.js file i opted for use a variable here, but it works too.
 });
 
 client.connect();
