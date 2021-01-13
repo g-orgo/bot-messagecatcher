@@ -12,16 +12,18 @@ Simple as it seems, go through this documentation and don't forget to check if y
 
 
 1. [TMIJS](https://github.com/g-orgo/bot-messagecatcher/tree/master#tmijs)
-	- [oauth flow](https://github.com/g-orgo/bot-messagecatcher/tree/master#oauth-flow)
+	1.1 [oauth flow](https://github.com/g-orgo/bot-messagecatcher/tree/master#oauth-flow)
 		* [permissions, scopes](https://github.com/g-orgo/bot-messagecatcher/tree/master#permissions-scopes)
-	- [simple command](https://github.com/g-orgo/bot-messagecatcher/tree/master#simple-command)
+	1.2 [commands](https://github.com/g-orgo/bot-messagecatcher/tree/master#commands)
+		* [d.r.y](https://github.com/g-orgo/bot-messagecatcher/tree/master#d-r-y)
+
 
 
 
 ## TMIJS
 First i'm gonna show a little about the twitchAPI (aka TMIJS). If you're not familiar to authentication be safe, you can check this [TMI.JS](https://tmijs.com/#example-anonymous-connection) page. They talk about all kinds of authentication flow you can use. Also, i'll try to bring some cool examples.
 
-### Oauth flow
+### 1.1 Oauth flow
 
 You'll need the [oAuth](https://twitchapps.com/tmi/) code of your bot account, this authorization will give to you _just a few_ permissions for your bot account. If you want specific permissions you'll need to search a little harder, depending of what you want it will involve some request and response lines of code but i didn't and honestly you may not use those, so there's no reason to me to explain this.
 
@@ -38,10 +40,10 @@ This is the oauth flow:
 		},
 		identity: {
 			username: '<YOUR_BOT_USERNAME>',
-			// And yes, you need to mantain the "oauth:".
+			// Yes, you need to mantain the "oauth:".
 			password: '<YOUR_OAUTH_TOKEN>'
 		},
-		// As you can see at my index.js file i opted for use a variable here, but it works too.
+		// If you see my index.js file you'll notice i opted for use a variable here, but it works too.
 		channels: ['<YOUR_CHANNEL_NAME>']  
 	});
 
@@ -70,9 +72,9 @@ But i've never try this, so i don't know what kind of permissions it has.
 
 Well, as i mentioned before if you need specific scopes, like ban someone for exemple, you can use Express to get the authenticationURL (like the spotifyAPI use of it). I mean, the only moment i needed more permissions that i already have with this generic oauth token generator (garanted by TMIJS) was when i pretend to create a "mod giver" command, but i left the idea behind so the generic token fits very well to my code.
 
-### Simple command
+### 1.2 Commands
 
-For this example i'll take one of my old codes from ```index.js```.
+For this example i'll take one of my old codes from index.js.
 
 ```js
 
@@ -92,3 +94,19 @@ As you can see it's quite simple to understand the syntax of the bot. Here we ar
 ```
 
 At [say](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Commands.md#say) command has something smart you can do with your bot, i strong recommend you to use a variable to set the channel instead of insert it line by line cause if you want to use it in another channel this _trick_ will handle this situations very well. Change a variable and then is all good.
+
+### D.R.Y
+
+You know "Don't repeat yourself" programming ideology? Here i'll explain something a bit different but with the same fundament. Whatever your using [chat](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Events.md#chat) or [message](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Events.md#message) event __YOU NEED TO USE__ this line at the beggining of it scope:
+
+```js
+	if (self) return
+```
+
+This will prevent your bot of activate a command by it own calling. For example i have this piece of code from my index.js
+
+```js
+	bot.say(chName, `I've found this: ${songArray}. Now you need to retrieve the chossen number just after !sr (example: !sr1 ${s})"`)
+```
+
+The idea here is that you use "!sr <Artist, Album, Song>" to create a list of 5 items spotify searched for and then you use the same command but with the id of the song you want. Simple, right? Yea but if i haven't use "dry" execution this _example_ should activate the code, even if was the bot who said it.
