@@ -106,7 +106,7 @@ You know "Don't repeat yourself" programming ideology? I'll explain to you somet
 This will prevent your bot of activate a command by it own calling. For example i have this piece of code from my index.js
 
 ```js
-	bot.say(chName, `I've found this: ${songArray}. Now you need to retrieve the choosen number just after !sr (example: !sr1 ${s})`)
+	bot.say(chName, `I've found this: ${songArray}. Now you need to retrieve the chosen number just after !sr (example: !sr1 ${s})`)
 ```
 
 The idea here is that you use "!sr <Artist, Album, Song>" to create a list of 5 items spotify searched for and then you use the same command but with the id of the song you want. Simple, right? Yea! but if i haven't use "dry function" this _example_ should activate the code, even if was the bot who said it.
