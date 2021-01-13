@@ -33,7 +33,8 @@ const client = new tmi.Client({ // I prefer to call this "client", bot.
 		username: '<YOUR_BOT_USERNAME>',
 		password: '<YOUR_OAUTH_TOKEN>'  // And yes, you need to mantain the "oauth:".
 	},
-	channels: [ '<YOUR_CHANNEL_NAME>' ]  // As you can see at my index.js file i opted for use a variable here, but it works too.
+	channels: [ '<YOUR_CHANNEL_NAME>' ]  /* As you can see at my index.js file i opted for use a 
+											variable here, but it works too. */
 });
 
 client.connect();
