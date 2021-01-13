@@ -11,16 +11,16 @@ Simple as it seems, go through this documentation and don't forget to check if y
 ```
 
 
-1. [TMIJS](https://github.com/g-orgo/bot-messagecatcher/tree/master#tmijs)
-	- [1.1 oauth flow](https://github.com/g-orgo/bot-messagecatcher/tree/master#oauth-flow)
+1. [TMIJS](https://github.com/g-orgo/bot-messagecatcher/tree/master#10-tmijs)
+	- [1.1 oauth flow](https://github.com/g-orgo/bot-messagecatcher/tree/master#11-oauth-flow)
 		* [permissions, scopes](https://github.com/g-orgo/bot-messagecatcher/tree/master#permissions-scopes)
-	- [1.2 commands](https://github.com/g-orgo/bot-messagecatcher/tree/master#commands)
+	- [1.2 commands](https://github.com/g-orgo/bot-messagecatcher/tree/master#12-commands)
 		* [d.r.y](https://github.com/g-orgo/bot-messagecatcher/tree/master#dry)
 
 
 
 
-## 1 TMIJS
+## 1.0 TMIJS
 First i'm gonna show a little about the twitchAPI (aka TMIJS). If you're not familiar to authentication be safe, you can check this [TMI.JS](https://tmijs.com/#example-anonymous-connection) page. They talk about all kinds of authentication flow you can use. Also, i'll try to bring some cool examples.
 
 ### 1.1 Oauth flow
