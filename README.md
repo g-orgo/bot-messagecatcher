@@ -15,7 +15,7 @@ Simple as it seems, go through this documentation and don't forget to check if y
 	1.1 [oauth flow](https://github.com/g-orgo/bot-messagecatcher/tree/master#oauth-flow)
 		* [permissions, scopes](https://github.com/g-orgo/bot-messagecatcher/tree/master#permissions-scopes)
 	1.2 [commands](https://github.com/g-orgo/bot-messagecatcher/tree/master#commands)
-		* [d.r.y](https://github.com/g-orgo/bot-messagecatcher/tree/master#d-r-y)
+		* [d.r.y](https://github.com/g-orgo/bot-messagecatcher/tree/master#dry)
 
 
 
