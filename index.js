@@ -192,7 +192,7 @@ bot.on('chat', (channel, user, message, self) =>{
                     ++count
                 }
     
-                bot.say(chName, `Achei isso no spotify: ${songArray}. Agora tu acrescenta o número escolhido depois do !sr (exemplo: !sr1 ${s})"`)
+                bot.say(chName, `Achei isso no spotify: ${songArray}. Agora tu acrescenta o número escolhido depois do !sr (exemplo: !sr1 ${s})`)
             })().catch(e => {
                 console.error(e)
             })
