@@ -4,8 +4,8 @@ Hello!
 I've created this bot to show some of my programming skills (job interview issues 😛). This README file will talk about some of the mind/working flow i choose to.
 
 
-1. TMIJS
-* OAUTH FLOW
+1. [TMIJS](https://github.com/g-orgo/bot-messagecatcher/tree/master#tmijs)
+	* [OAUTH FLOW](https://github.com/g-orgo/bot-messagecatcher/tree/master#oauth-flow)
 
 
 
