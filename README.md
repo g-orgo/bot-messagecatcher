@@ -91,4 +91,4 @@ As you can see it's quite simple to understand the syntax of the bot. Here we ar
 
 ```
 
-At [say](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Commands.md#say) command has something smart you can do with your bot, i strong recommend you to use a variable to set the channel instead of insert it line by line cause if you want to use it in another channel this _trick_ will handle this situations very well. you change the variable and then is all good.
+At [say](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Commands.md#say) command has something smart you can do with your bot, i strong recommend you to use a variable to set the channel instead of insert it line by line cause if you want to use it in another channel this _trick_ will handle this situations very well. Change a variable and then is all good.
