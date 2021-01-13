@@ -97,7 +97,7 @@ At [say](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Co
 
 ### D.R.Y
 
-You know "Don't repeat yourself" programming ideology? Here i'll explain something a bit different but with the same fundament. Whatever your using [chat](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Events.md#chat) or [message](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Events.md#message) event __YOU NEED TO USE__ this line at the beggining of it scope:
+You know "Don't repeat yourself" programming ideology? I'll explain to you something different but with the same fundament. Whatever your using [chat](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Events.md#chat) or [message](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Events.md#message) event __YOU NEED TO USE__ this line at the beggining of it scope:
 
 ```js
 	if (self) return
