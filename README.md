@@ -1,17 +1,29 @@
 # THE NICEST README.md FILE YOU'VE SEEN ALL TIME.
 Hello!
 
-I've created this bot to show some of my programming skills (job interview issues 😛). This README file will talk about some of the mind/working flow i choose to. TMIJS, Express and Spotify-web-api will need to be installed at your machine with NodeJS so if you haven't download it and run this at your console.
+I've created this bot to show some of my programming skills (job interview issues 😛). This README file will talk about some of the mind/working flow i choose to. TMIJS, Express and Spotify-web-api will need to be installed at your machine with NodeJS. If you haven't download it yet go do it and then you run this at your console.
 
 
-Ultra simple!
+Simple as it seems, go through this documentation and don't forget to check if you has already installed the module you're studying!
+
 ```
 npm install <YOUR_MODULE>
 ```
 
 
+
+
+
 1. [TMIJS](https://github.com/g-orgo/bot-messagecatcher/tree/master#tmijs)
 	* [OAUTH FLOW](https://github.com/g-orgo/bot-messagecatcher/tree/master#oauth-flow)
+
+
+
+
+
+
+
+
 
 
 
@@ -27,8 +39,11 @@ First i'm gonna show a little about the twitchAPI (aka TMIJS). If you're not fam
 
 ### OAUTH FLOW
 
-You'll take your OAUTH code [here](https://twitchapps.com/tmi/), this authorization will give to you __just a few__ permissions on your twitch account. If you want specific permissions you'll need to search a little harder, depending of what you want it will involve some request and response lines of code but i didn't and honestly you may not use those.
+You'll take your OAUTH code [here](https://twitchapps.com/tmi/), this authorization will give to you _just a few_ permissions on your twitch account. If you want specific permissions you'll need to search a little harder, depending of what you want it will involve some request and response lines of code but i didn't and honestly you may not use those, so there's no reason to me to explain this.
 
+
+
+This is the oauth flow:
 ```js
 const tmi = require('tmi.js');
 
@@ -50,7 +65,10 @@ const client = new tmi.Client({
 client.connect();
 ```
 
-You can use a anonymous connection too:
+
+
+
+You can use an anonymous connection too:
 
 ```js
 const tmi = require('tmi.js');
@@ -66,4 +84,4 @@ const client = new tmi.Client({
 client.connect();
 ```
 
-but i've never try this, so i don't know what kind of permissions it has.
+But i've never try this, so i don't know what kind of permissions it has.
