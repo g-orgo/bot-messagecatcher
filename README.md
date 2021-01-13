@@ -60,10 +60,10 @@ const client = new tmi.Client({
 		secure: true,
 		reconnect: true
 	},
-	channels: [ 'my_name' ]
+	channels: ['<YOUR_CHANNEL_NAME>'] 
 });
 
 client.connect();
 ```
 
-but i've never try this, so i don't know what kind of permissions this has.
+but i've never try this, so i don't know what kind of permissions it has.

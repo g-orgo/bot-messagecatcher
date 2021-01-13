@@ -59,7 +59,7 @@ bot.connect().catch(function(err){
 })
 //Setting up spotifyAPI variable and token.
 var spotifyApi = new SpotifyWebApi();
-var spotifyAuthorizationCode = "BQA0S2stg1YomCiN_jVP4CJj85bRE3VD6xTnk25xwLy0aEIEDHCfljSDcjXxkdtfN4QhatkVys4F1gUkL-5Wpyfe_jPGNahg2HnwEtpUF8t90IAgcuXjx92r1KSkMx8VcB8OhsLAxEc2mWJYOpXWlaCTTOqZx6Dqk9OeBXr4gEjX8ZcCdUv6wFX-soFmBzShZZ1BAykPBou7u5g9CQqVbZX3HxabztXMIC0WxGvdYOZCreeGyXak2MJRHsFRGrTkcIyBE26EELu_hz6bNY5l3OnhpXM"
+var spotifyAuthorizationCode = "BQB896-fxgHzFYW2oilEItv5InpscLZJCGdyx_yw_PMzXTa-J3L6LwtrLUI8FyAS2gI3MZnRJO4korxKkwTwU1wvNSztqrksL77tdCRWGq6hi52EMJy6SOX54W1VFtSI5hbXeFCqBuMpnxFGLev4232vDES_i9xViCMR5Az3GpMW5q0dFdFpwFvG83EQCVXQ3lGSuDqGCbYd31MB8otbowBzf4vEkQEgOCFWLxzUpCoI6QQnzielZo9XdChzHVRSEnrwh93qbMA-ThZ7PdGaRHqe"
 
 // Send a message when connected.
 bot.on('connected', (adress, port) => {
@@ -77,21 +77,23 @@ bot.on('chat', (channel, user, message, self) =>{
     // Command to clear screen.
     if (messageSensitiveLess === '!cls' || messageSensitiveLess === '!clear'){
         // Cooldown loop.
-        if (onCooldown.has('true')){
+        if (onCooldown.has(messageSensitiveLess)){
             bot.say(chName, `Comando em tempo de recarga, aguarde uns segundos antes de tentar novamente.`)
         }else {
             // Doing a permission's loop for only staff commands.
-            if (user.mod === true || user.badges['broadcaster'] === '1'){
+            if (user.badges == null){
+                bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de restrito.`)
+            }else if (user.mod === true || user.badges['broadcaster'] === '1'){
                 // Here goes the only staff commands.
                 
                 bot.clear(chName); // It cleans chat messages.
                 bot.say(chName, `Chat limpo. ;)`)
                 console.log(`\n\n${dateTime()} - Chat was cleared by: ${user.username}. At "${channel}" channel... OK`)
             } else [
-                bot.say(chName, `@${user.username}, infelizmente este é um comando de restrito.`)
+                bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de restrito.`)
             ]
             
-            onCooldown.add('true')
+            onCooldown.add(messageSensitiveLess)
             setTimeout(()=>{
                 onCooldown.delete('true')
             }, 10000) // Here we'll set the time we want to the command in ms.
@@ -100,10 +102,12 @@ bot.on('chat', (channel, user, message, self) =>{
 
     // Command to pause/resume music.
     if (messageSensitiveLess === '!music_p' || messageSensitiveLess === '!play'){
-        if (onCooldown.has('true')){
+        if (onCooldown.has(messageSensitiveLess)){
             bot.say(chName, `Comando em tempo de recarga, aguarde uns segundos antes de tentar novamente.`)
-        }else{
-            if (user.mod === true || user.badges['broadcaster'] === '1'){
+        }else {
+            if (user.badges == null){
+                bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de restrito.`)
+            }else if (user.mod === true || user.badges['broadcaster'] === '1'){
                 (async () => {
                     spotifyApi.setAccessToken(spotifyAuthorizationCode);
                     const playingState = await spotifyApi.getMyCurrentPlaybackState();
@@ -116,13 +120,13 @@ bot.on('chat', (channel, user, message, self) =>{
                     console.error(e)
                 });
                 console.log(`\n\n${dateTime()} - ${user.username} stopped/resume the music at "${channel}" channel... OK`);
-            } else [
-                bot.say(chName, `@${user.username}, infelizmente este é um comando de restrito.`)
+            }else [
+                bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de restrito.`)
             ]
 
-            onCooldown.add('true')
+            onCooldown.add(messageSensitiveLess)
             setTimeout(()=>{
-                onCooldown.delete('true')
+                onCooldown.delete(messageSensitiveLess)
             }, 3000);
         }
     }
@@ -168,7 +172,7 @@ bot.on('chat', (channel, user, message, self) =>{
             }),
             console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`)
         ]}else [
-            bot.say(chName, `@${user.username}, infelizmente este é um comando de restrito.`)
+            bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de restrito.`)
         ]
     }
 
