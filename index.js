@@ -37,7 +37,7 @@ const onCooldown = new Set();
     Also doing the authentication for tmiAPI */
 const settings = {
     options:{
-        clientId: 'messagecatcherbot',
+        clientId: 'lo87k57nqlfqg1m8xt27w4zsbbssmm',
         debug: true
     },
     connection:{
