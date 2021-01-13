@@ -20,7 +20,7 @@ Simple as it seems, go through this documentation and don't forget to check if y
 
 
 
-## TMIJS
+## 1 TMIJS
 First i'm gonna show a little about the twitchAPI (aka TMIJS). If you're not familiar to authentication be safe, you can check this [TMI.JS](https://tmijs.com/#example-anonymous-connection) page. They talk about all kinds of authentication flow you can use. Also, i'll try to bring some cool examples.
 
 ### 1.1 Oauth flow
