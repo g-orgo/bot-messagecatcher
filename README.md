@@ -121,10 +121,24 @@ The idea here is that you use "!sr <Artist, Album, Song>" to create a list of 5 
 
 ### Staff commands
 
-For the only-staff loop idea i did a very messy code, after going for like 2 nights of tests i finally found out this:
+For the only-staff loop idea i did a very messy code, writing this README file i finally found out this:
 
 ```js
 
+	if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
+
+		// Not staff message.
+
+	}else if(user.badges['moderator'] == '1' || user.badges['broadcaster'] === '1') {
+
+		// Here goes the only staff commands.
+
+	}
+
+```
+I used twitchAPI badges system to it! in the past releases of the code i was doing it that way: 
+
+```js
 	if (user.badges == null){
 
 		// Not staff message.
@@ -141,30 +155,7 @@ For the only-staff loop idea i did a very messy code, after going for like 2 nig
 
 ```
 
-You might be thinking why i did this ``` if (user.badges == null) ``` when i've already called  ```else```. Like, if someone has no "broadcaster" or even "mod" badge it should not be a staff-user, right? Well... you're right. But, what twitchAPI will shows up if you don't use this first line is that "you can't read 'null'". If you call for something like this 
-
-```js
-
-	if (user.badges == null){
-
-		// Not staff message.
-
-	}else [
-
-		if (user.mod === true || user.badges['broadcaster'] === '1'){
-
-		// Here goes the only staff commands.
-				
-		}else [
-
-			// Not staff message.
-
-		]
-	]
-
-```
-
-Should work too, but i didn't test it.
+It works too but has one more line. You might be thinking why i did this ``` if (user.badges == null) ``` when i've already called  ```else```. Like, if someone has no "broadcaster" or even "mod" badge it should not be a staff-member, right? Well... you're right. But, what twitchAPI will shows up if you don't use this first line is that "you can't read 'null'", also if someone has another kind of badge (like i've seen before) it will trigger the staff-member lines, so it's good to force it parameter.
 
 ### Cooldown
 

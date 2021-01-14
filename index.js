@@ -59,7 +59,7 @@ bot.connect().catch(function(err){
 })
 //Setting up spotifyAPI variable and token.
 var spotifyApi = new SpotifyWebApi();
-var spotifyAuthorizationCode = "BQB896-fxgHzFYW2oilEItv5InpscLZJCGdyx_yw_PMzXTa-J3L6LwtrLUI8FyAS2gI3MZnRJO4korxKkwTwU1wvNSztqrksL77tdCRWGq6hi52EMJy6SOX54W1VFtSI5hbXeFCqBuMpnxFGLev4232vDES_i9xViCMR5Az3GpMW5q0dFdFpwFvG83EQCVXQ3lGSuDqGCbYd31MB8otbowBzf4vEkQEgOCFWLxzUpCoI6QQnzielZo9XdChzHVRSEnrwh93qbMA-ThZ7PdGaRHqe"
+var spotifyAuthorizationCode = "BQA3DgAycVAh5AAYic2_89w99FY-bYUkCLsDQyM3AYwVvqoIR7bQ9FcTrhicYS_4NeYn18tEjwnaDiIya37rPp3r4TXVcxKYhL35oiwKBPxYAGFlMDLivhAFrMaz9j1ivrS-OEelhCJTjT-FFjTRvmrqwk18kBRhLe6Y1Rlrjg63XWl8eJQeTg-zgKm5lwkAXA10E76NV7umIv6X2Vw8Elr9btBeQGb28yoYojkDLD8nX7o2fAphnOujtkpKs_gv9E86HWaS7OQKNZi41j_n5e1d"
 
 // Send a message when connected.
 bot.on('connected', (adress, port) => {
@@ -81,33 +81,32 @@ bot.on('chat', (channel, user, message, self) =>{
             bot.say(chName, `Comando em tempo de recarga, aguarde uns segundos antes de tentar novamente.`)
         }else {
             // Doing a permission's loop for only staff commands.
-            if (user.badges == null){
+            if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
                 bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de restrito.`)
-            }else if (user.mod === true || user.badges['broadcaster'] === '1'){
+            }else if(user.badges['moderator'] == '1' || user.badges['broadcaster'] === '1'){
                 // Here goes the only staff commands.
-                
+
                 bot.clear(chName); // It cleans chat messages.
                 bot.say(chName, `Chat limpo. ;)`)
                 console.log(`\n\n${dateTime()} - Chat was cleared by: ${user.username}. At "${channel}" channel... OK`)
-            } else [
-                bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de restrito.`)
-            ]
-            
-            onCooldown.add(messageSensitiveLess)
-            setTimeout(()=>{
-                onCooldown.delete(messageSensitiveLess)
-            }, 10000) // Here we'll set the time we want to the command in ms.
+
+                onCooldown.add(messageSensitiveLess)
+                setTimeout(()=>{
+                    onCooldown.delete(messageSensitiveLess)
+                }, 10000) // Here we'll set the time we want to the command in ms.
+            };
         };
-    }
+    };
 
     // Command to pause/resume music.
     if (messageSensitiveLess === '!music_p' || messageSensitiveLess === '!play'){
         if (onCooldown.has(messageSensitiveLess)){
             bot.say(chName, `Comando em tempo de recarga, aguarde uns segundos antes de tentar novamente.`)
         }else {
-            if (user.badges == null){
+            if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
                 bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de restrito.`)
-            }else if (user.mod === true || user.badges['broadcaster'] === '1'){
+            }else if(user.badges['moderator'] == '1' || user.badges['broadcaster'] === '1') {
+            
                 (async () => {
                     spotifyApi.setAccessToken(spotifyAuthorizationCode);
                     const playingState = await spotifyApi.getMyCurrentPlaybackState();
@@ -120,61 +119,60 @@ bot.on('chat', (channel, user, message, self) =>{
                     console.error(e)
                 });
                 console.log(`\n\n${dateTime()} - ${user.username} stopped/resume the music at "${channel}" channel... OK`);
-            }else [
-                bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de restrito.`)
-            ]
-
-            onCooldown.add(messageSensitiveLess)
-            setTimeout(()=>{
-                onCooldown.delete(messageSensitiveLess)
-            }, 3000);
-        }
-    }
+            
+                onCooldown.add(messageSensitiveLess)
+                setTimeout(()=>{
+                    onCooldown.delete(messageSensitiveLess)
+                }, 3000);
+            };
+        };
+    };
 
     // Command to change sound volume.
     if (messageSensitiveLess.includes('!vol')){
-        if (user.mod === true || user.badges['broadcaster'] === '1'){
-        var s = messageSensitiveLess.slice(4);
-
-        if (s == "up"){
-            (async () => {
-                spotifyApi.setAccessToken(spotifyAuthorizationCode);
-                var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
-                
-                if(volumePorcent > 90){
-                    bot.say(chName, `O volume já está em 100%`);
-                } else [
-                    await spotifyApi.setVolume(volumePorcent + 10)
-                ]
-            })().catch(e => {
-                console.error(e)
-            })
-            console.log(`\n\n${dateTime()} - ${user.username} increased the volume at "${channel}" channel... OK`);
-        }else if (s == "down"){
-            (async () => {
-                spotifyApi.setAccessToken(spotifyAuthorizationCode);
-                var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
-                if(volumePorcent < 10){
-                    bot.say(chName, `O volume já está em 0%`);
-                } else [
-                    await spotifyApi.setVolume(volumePorcent - 10)
-                ]
-            })().catch(e => {
-                console.error(e)
-            })
-            console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`);
-        }else [
-            (async () => {
-                spotifyApi.setAccessToken(spotifyAuthorizationCode);
-                await spotifyApi.setVolume(parseInt(s));
-            })().catch(e => {
-                console.error(e);
-            }),
-            console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`)
-        ]}else [
-            bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de restrito.`)
-        ]
-    }
+        if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
+            bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de uso restrito.`)
+        }else if(user.badges['moderator'] == '1' || user.badges['broadcaster'] === '1') {
+            var s = messageSensitiveLess.slice(4);
+        
+            if (s == "up"){
+                (async () => {
+                    spotifyApi.setAccessToken(spotifyAuthorizationCode);
+                    var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
+                    
+                    if(volumePorcent > 90){
+                        bot.say(chName, `O volume já está em 100%`);
+                    } else [
+                        await spotifyApi.setVolume(volumePorcent + 10)
+                    ]
+                })().catch(e => {
+                    console.error(e)
+                })
+                console.log(`\n\n${dateTime()} - ${user.username} increased the volume at "${channel}" channel... OK`);
+            }else if (s == "down"){
+                (async () => {
+                    spotifyApi.setAccessToken(spotifyAuthorizationCode);
+                    var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
+                    if(volumePorcent < 10){
+                        bot.say(chName, `O volume já está em 0%`);
+                    } else [
+                        await spotifyApi.setVolume(volumePorcent - 10)
+                    ]
+                })().catch(e => {
+                    console.error(e)
+                })
+                console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`);
+            }else [
+                (async () => {
+                    spotifyApi.setAccessToken(spotifyAuthorizationCode);
+                    await spotifyApi.setVolume(parseInt(s));
+                })().catch(e => {
+                    console.error(e);
+                }),
+                console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`)
+            ];
+        };
+    };
 
     if(messageSensitiveLess.includes('!sr')){
         var s = messageSensitiveLess.slice(4);
@@ -210,16 +208,8 @@ bot.on('chat', (channel, user, message, self) =>{
                 console.error(e)
             });
         }
-    } 
-});
+    }
 
-// ALL KIND O' MESSAGE COMMANDS
-bot.on('message', (channel, userstate, message, self) =>{
-    if (self) return
-    // It turns all kind of alternatives for "message" understandable.
-    var messageSensitiveLess = message.toLowerCase();
-
-    // A social media function, when someone send a message with social media names it returns my link or identification on it.
     if (messageSensitiveLess === '!instagram' || messageSensitiveLess === '!ig') {
         bot.say(chName, `O instagram dele é: ${socialMediaInfo['instagram']}.`);
         console.log(`\n\n${dateTime()} - A social media(instagram) message was send at ${channel} to @${userstate.username}... OK`);
@@ -237,4 +227,5 @@ bot.on('message', (channel, userstate, message, self) =>{
         bot.say(chName, `Estes são os comandos que eu tenho até o momento: ${commandsInfo}`);
         console.log(`\n\n${dateTime()} - Someone's asking for some help at "${channel} channel".`);
     };
+
 });
