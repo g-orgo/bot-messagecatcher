@@ -208,12 +208,12 @@ This one give me a lot of pain, differently from TMIJS it doesn't has a generic 
 
 Look, i'll be real. This oAuth2 leaves me mad several times, i didn't get that for a __long__ period on this development and i think i can't say i'm secure enough to _teach_ this. But i'll try my best.
 
-First you set the [scopes](https://developer.spotify.com/documentation/general/guides/scopes/) you want to handle
+First you set the [scopes](https://developer.spotify.com/documentation/general/guides/scopes/) you want to handle. If you're not familiar to it, this is like your acess control wristbands in digital world.
 
 ```js
 
 	spotifyscopes = [ 
-		'<SCOPE_YOU_WANT>',
+		'<SCOPE_YOU_WANT_TO_USE>',
 	];
 
 ```
@@ -277,4 +277,4 @@ This process is very important for the spotify integration, since you've done it
 	})
 ```
 
-I mean, you can do it directly in your main file but i abstracted it to a separated file so i can run them both in different consoles giving a safe integrity to your token life.
+I mean, you can do it directly in your main file but i abstracted it to a separated file so i can run them both in different consoles giving a safe integrity to my token life.
