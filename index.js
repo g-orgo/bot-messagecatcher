@@ -82,7 +82,7 @@ bot.on('chat', (channel, user, message, self) =>{
         }else {
             // Doing a permission's loop for only staff commands.
             if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
-                bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de restrito.`)
+                bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de uso restrito.`)
             }else if(user.badges['moderator'] == '1' || user.badges['broadcaster'] === '1'){
                 // Here goes the only staff commands.
 
@@ -93,7 +93,7 @@ bot.on('chat', (channel, user, message, self) =>{
                 onCooldown.add(messageSensitiveLess)
                 setTimeout(()=>{
                     onCooldown.delete(messageSensitiveLess)
-                }, 10000) // Here we'll set the time we want to the command in ms.
+                }, 10000)
             };
         };
     };
@@ -104,7 +104,7 @@ bot.on('chat', (channel, user, message, self) =>{
             bot.say(chName, `Comando em tempo de recarga, aguarde uns segundos antes de tentar novamente.`)
         }else {
             if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
-                bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de restrito.`)
+                bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de uso restrito.`)
             }else if(user.badges['moderator'] == '1' || user.badges['broadcaster'] === '1') {
             
                 (async () => {

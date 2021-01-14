@@ -1,10 +1,7 @@
 # THE NICEST README.md FILE YOU'VE SEEN ALL TIME.
 Hello!
 
-I've created this bot to show some of my programming skills (job interview issues 😛). This README file will talk about some of the mind/working flow i choose to. TMIJS, Express and Spotify-web-api will need to be installed at your machine with NodeJS. If you haven't download it yet go do it and then you run this at your console.
-
-
-Simple as it seems, go through this documentation and don't forget to check if you has already installed the module you're studying!
+I've created this bot to show some of my programming skills (job interview issues 😛). This README file will talk about some of the mind/working flow i choose to. TMIJS, Express and Spotify-web-api will need to be installed at your machine with NodeJS. If you haven't download it yet go do it and then you go through this documentation and don't forget to check if you has already installed the module you're studying!
 
 ```
 	npm install <YOUR_MODULE>
@@ -196,7 +193,7 @@ But i quickly changed my mind when i found this "set kind" to create it.
 		onCooldown.add(messageSensitiveLess)
 		setTimeout(()=>{
 			onCooldown.delete(messageSensitiveLess)
-		}, 10000) // Here we'll set the time we want to the command in ms.
+		}, 10000) // Here we'll set the time we want in ms.
 	}
 
 ```
