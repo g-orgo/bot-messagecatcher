@@ -18,6 +18,7 @@ I've created this bot to show some of my programming skills (job interview issue
 2. [SPOTIFY API](https://github.com/g-orgo/bot-messagecatcher/tree/master#20-spotify-api)
 	- [2.1 authentication](https://github.com/g-orgo/bot-messagecatcher/tree/master#21-authentication)
 		* [express](https://github.com/g-orgo/bot-messagecatcher/tree/master#express)
+	- [2.2 commands examples](https://github.com/g-orgo/bot-messagecatcher/tree/master#22-simple-command-example)
 
 ## 1.0 TMIJS
 First i'm gonna show a little about the twitchAPI (aka TMIJS). If you're not familiar to authentication be safe, you can check this [TMI.JS](https://tmijs.com/#example-anonymous-connection) page. They talk about all kinds of authentication flow you can use. Also, i'll try to bring some cool examples.
@@ -206,7 +207,7 @@ This one give me a lot of pain, differently from TMIJS it doesn't has a generic 
 
 ### 2.1 Authentication
 
-Look, i'll be real. This oAuth2 leaves me mad several times, i didn't get that for a __long__ period on this development and i think i can't say i'm secure enough to _teach_ this. But i'll try my best.
+Look, i'll be real. This oAuth2 leaves me mad several times. I didn't get that for a __long__ period on this development and i think i can't say i'm secure enough to _teach_ this. But i'll try my best.
 
 First you set the [scopes](https://developer.spotify.com/documentation/general/guides/scopes/) you want to handle. If you're not familiar to it, this is like your acess control wristbands in digital world.
 
@@ -278,3 +279,94 @@ This process is very important for the spotify integration, since you've done it
 ```
 
 I mean, you can do it directly in your main file but i abstracted it to a separated file so i can run them both in different consoles giving a safe integrity to my token life.
+
+### 2.2 Commands examples
+
+With spotifyAPI you can use this generic syntax example:
+
+```js
+
+	(async () => {
+
+		spotifyApi.setAccessToken("<YOUR_TOKEN>");
+		
+		const me = await spotifyApi.getMe()
+
+	})().catch(e => {
+		console.error(e)
+	});
+
+```
+
+I'll show one of my commands flow so you can fell what it should looks like
+
+```js
+	// Command to change sound volume.
+	if (messageSensitiveLess.includes('!vol')){
+		if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
+			bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de uso restrito.`)
+		}else if(user.badges['moderator'] == '1' || user.badges['broadcaster'] === '1') {
+			var s = messageSensitiveLess.slice(4);
+		
+			if (s == "up"){
+
+
+
+				(async () => {
+					spotifyApi.setAccessToken(spotifyAuthorizationCode);
+					var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
+					
+					if(volumePorcent > 90){
+						bot.say(chName, `O volume já está em 100%`);
+					} else [
+						await spotifyApi.setVolume(volumePorcent + 10)
+					]
+				})().catch(e => {
+					console.error(e)
+				})
+
+
+
+
+				console.log(`\n\n${dateTime()} - ${user.username} increased the volume at "${channel}" channel... OK`);
+			}else if (s == "down"){
+
+
+
+
+				(async () => {
+					spotifyApi.setAccessToken(spotifyAuthorizationCode);
+					var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
+					if(volumePorcent < 10){
+						bot.say(chName, `O volume já está em 0%`);
+					} else [
+						await spotifyApi.setVolume(volumePorcent - 10)
+					]
+				})().catch(e => {
+					console.error(e)
+				})
+
+
+
+
+				console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`);
+			}else [
+
+
+
+				(async () => {
+					spotifyApi.setAccessToken(spotifyAuthorizationCode);
+					await spotifyApi.setVolume(parseInt(s));
+				})().catch(e => {
+					console.error(e);
+				}),
+
+
+
+				
+				console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`)
+			];
+		};
+	};
+
+```
