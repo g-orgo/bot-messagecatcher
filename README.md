@@ -15,7 +15,7 @@ I've created this bot to show some of my programming skills (job interview issue
 		* [d.r.y](https://github.com/g-orgo/bot-messagecatcher/tree/master#dry)
 		* [staff commands](https://github.com/g-orgo/bot-messagecatcher/tree/master#staff-commands)
 		* [cooldown](https://github.com/g-orgo/bot-messagecatcher/tree/master#cooldown)
-2. [SPOTIFYAPI](https://github.com/g-orgo/bot-messagecatcher/tree/master#20-spotify-api)
+2. [SPOTIFY API](https://github.com/g-orgo/bot-messagecatcher/tree/master#20-spotify-api)
 	- [2.1 authentication](https://github.com/g-orgo/bot-messagecatcher/tree/master#21-authentication)
 		* [express](https://github.com/g-orgo/bot-messagecatcher/tree/master#express)
 
@@ -69,7 +69,7 @@ But i've never try this, so i don't know what kind of permissions it has.
 
 ### Permissions, scopes
 
-Well, as i mentioned before if you need specific scopes, like ban someone for exemple, you can use Express to get the authenticationURL (like the spotifyAPI use of it). I mean, the only moment i needed more permissions that i already have with this generic oauth token generator (garanted by TMIJS) was when i pretend to create a "mod giver" command, but i left the idea behind so the generic token fits very well to my code.
+Well... as i mentioned before if you need specific scopes, like ban someone for exemple, you can use Express to get the authenticationURL (like the spotifyAPI use of it). I mean, the only moment i needed more permissions that i already have with this generic oauth token generator (garanted by TMIJS) was when i pretend to create a "mod giver" command, but i left the idea behind so the generic token fits very well to my code.
 
 ### 1.2 Commands
 
@@ -208,9 +208,31 @@ This one give me a lot of pain, differently from TMIJS it doesn't has a generic 
 
 Look, i'll be real. This oAuth2 leaves me mad several times, i didn't get that for a __long__ period on this development and i think i can't say i'm secure enough to _teach_ this. But i'll try my best.
 
+First you set the [scopes](https://developer.spotify.com/documentation/general/guides/scopes/) you want to handle
+
+```js
+
+	spotifyscopes = [ 
+		'<SCOPE_YOU_WANT>',
+	];
+
+```
+
+Then you set the credentials of your aplication at "spotify for developer" > "[dashboard](https://developer.spotify.com/dashboard/applications)":
+
+```js
+var spotifyApi = new SpotifyWebApi({
+    clientId: '<CLIENT_ID>',
+    clientSecret: '<CLIENT_SECRET>',
+    redirectUri: 'http://localhost:8888/callback' // I recommend you to use the same i use.
+});
+```
+
+
+
 ### Express
 
-I choose express to do it cause i was following [this](https://github.com/thelinmichael/spotify-web-api-node/blob/master/examples/tutorial/00-get-access-token.js) examples but i've seen people doing this requests&response's feature with [request module](https://github.com/request/request)
+I choose express to do it cause i was following [this](https://github.com/thelinmichael/spotify-web-api-node/blob/master/examples/tutorial/00-get-access-token.js) examples, but i've already seen people doing this requests&response's feature with [request module](https://github.com/request/request).
 
 
 ```js
@@ -222,10 +244,9 @@ I choose express to do it cause i was following [this](https://github.com/thelin
 
 ```
 
-Has this permissions is very important for the spotify integration and since you've already done it, you'll be redirect to /callback and there's what we want.
+This process is very important for the spotify integration, since you've done it you'll be redirect to "/callback" and there's what we want.
 
 ```js
-
 	exp.get('/callback', (req, res) =>{
 		const code = req.query.code;
 
@@ -244,7 +265,7 @@ Has this permissions is very important for the spotify integration and since you
 
 			setInterval(async () => {
 				const data = await spotifyApi.refreshAccessToken();
-				const access_token = data.body['access_token'];
+				access_token = data.body['access_token'];
 		
 				console.log('\n\nThe access token has been refreshed!');
 				console.log('access_token:\n\n', access_token);
@@ -254,5 +275,6 @@ Has this permissions is very important for the spotify integration and since you
 			console.log(err)
 		})
 	})
-
 ```
+
+I mean, you can do it directly in your main file but i abstracted it to a separated file so i can run them both in different consoles giving a safe integrity to your token life.
