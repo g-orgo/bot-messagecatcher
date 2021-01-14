@@ -1,7 +1,7 @@
 # THE NICEST README.md FILE YOU'VE SEEN ALL TIME.
 Hello!
 
-I've created this bot to show some of my programming skills (job interview issues 😛). This README file will talk about some of the mind/working flow i choose to. TMIJS, Express and Spotify-web-api will need to be installed at your machine with NodeJS. If you haven't download it yet go do it and then you go through this documentation and don't forget to check if you has already installed the module you're studying!
+I've created this bot to show some of my programming skills (job interview issues 😛). This README file will talk about some of the mind/working flow i choose to. TMIJS, Express and Spotify-web-api will need to be installed at your machine with NodeJS. If you haven't download it yet go do it, and then you go through this documentation and don't forget to check if you has already installed the module you're studying!
 
 ```
 	npm install <YOUR_MODULE>
@@ -15,9 +15,9 @@ I've created this bot to show some of my programming skills (job interview issue
 		* [d.r.y](https://github.com/g-orgo/bot-messagecatcher/tree/master#dry)
 		* [staff commands](https://github.com/g-orgo/bot-messagecatcher/tree/master#staff-commands)
 		* [cooldown](https://github.com/g-orgo/bot-messagecatcher/tree/master#cooldown)
-
-
-
+2. [SPOTIFYAPI](https://github.com/g-orgo/bot-messagecatcher/tree/master#20-spotify-api)
+	- [2.1 authentication](https://github.com/g-orgo/bot-messagecatcher/tree/master#21-authentication)
+		* [express](https://github.com/g-orgo/bot-messagecatcher/tree/master#express)
 
 ## 1.0 TMIJS
 First i'm gonna show a little about the twitchAPI (aka TMIJS). If you're not familiar to authentication be safe, you can check this [TMI.JS](https://tmijs.com/#example-anonymous-connection) page. They talk about all kinds of authentication flow you can use. Also, i'll try to bring some cool examples.
@@ -96,7 +96,7 @@ At [say](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Co
 
 ### D.R.Y
 
-You know "Don't repeat yourself" programming ideology? I'll explain to you something different but with the same fundament. Whatever your using [chat](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Events.md#chat) or [message](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Events.md#message) event __YOU NEED TO USE__ this line at the beggining of it scope:
+You know "Don't repeat yourself" programming ideology? I'll explain to you something different but with the same fundament. Whatever your using [chat](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Events.md#chat) or [message](https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Events.md#message) event __YOU NEED TO USE__ this line at the beginning of it scope:
 
 ```js
 	if (self) return
@@ -199,3 +199,60 @@ But i quickly changed my mind when i found this "set kind" to create it.
 ```
 
 In this case, first of i've tried to add a value like "true" to "onCooldown" set, but it created a problem when multiple commands was on cooldown (i didn't deleted _time_, i leave it to console logs 😋).
+
+## 2.0 SPOTIFY API
+
+This one give me a lot of pain, differently from TMIJS it doesn't has a generic token generator and you're by you own. Actually this is ok, the worst of it is that if you want to learn something about it using nodeJS you'll need to search for people repository cause the documentation doesn't helped me so much. I mean, the [auth flow](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow) is very good but i just understand it for real when i searched for it [in](https://www.youtube.com/watch?v=rYDDWVuv-kI&t=1419s) [other](https://www.youtube.com/playlist?list=PLRUD_uiAYejRvQWkS2xjgFW20lRLp4snN) [places] (https://www.youtube.com/watch?v=Bk90lT6ne3g&t=235s) (they've different links).
+
+### 2.1 Authentication
+
+Look, i'll be real. This oAuth2 leaves me mad several times, i didn't get that for a __long__ period on this development and i think i can't say i'm secure enough to _teach_ this. But i'll try my best.
+
+### Express
+
+I choose express to do it cause i was following [this](https://github.com/thelinmichael/spotify-web-api-node/blob/master/examples/tutorial/00-get-access-token.js) examples but i've seen people doing this requests&response's feature with [request module](https://github.com/request/request)
+
+
+```js
+
+	exp.get('/login', (req, res) => {
+		// This will only works if you haven't authorizate the bot with your account yet.
+		res.redirect(spotifyApi.createAuthorizeURL(spotifyscopes));
+	});
+
+```
+
+Has this permissions is very important for the spotify integration and since you've already done it, you'll be redirect to /callback and there's what we want.
+
+```js
+
+	exp.get('/callback', (req, res) =>{
+		const code = req.query.code;
+
+		spotifyApi.authorizationCodeGrant(code).then(data => {
+			const access_token = data.body['access_token']
+			const refresh_token = data.body['refresh_token'];
+			const expires_in = data.body['expires_in']
+			
+			spotifyApi.setAccessToken(access_token);
+			spotifyApi.setRefreshToken(refresh_token);
+
+			console.log(`Spotify token expires in: ${data.body.expires_in}\n`)
+			console.log(`Hello, here's your token:\n\n ${access_token}\n\n It will be refreashed in 1hour`)
+
+			res.send('Success! You can now close the window.');
+
+			setInterval(async () => {
+				const data = await spotifyApi.refreshAccessToken();
+				const access_token = data.body['access_token'];
+		
+				console.log('\n\nThe access token has been refreshed!');
+				console.log('access_token:\n\n', access_token);
+				spotifyApi.setAccessToken(access_token);
+			}, expires_in / 2 * 1000);
+		}).catch(function(err){
+			console.log(err)
+		})
+	})
+
+```

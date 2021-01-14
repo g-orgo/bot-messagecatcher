@@ -3,7 +3,6 @@ const express = require('express');
 
 // First you'll set the scopes you want to change/handle
 spotifyscopes = [
-    'ugc-image-upload',
     'user-read-playback-state',
     'user-modify-playback-state',
     'user-read-currently-playing',
@@ -16,7 +15,6 @@ spotifyscopes = [
     'playlist-modify-private',
     'user-library-modify',
     'user-library-read',
-    'user-top-read',
     'user-read-playback-position',
     'user-read-recently-played',
     'user-follow-read',
@@ -39,14 +37,13 @@ exp.get('/login', (req, res) => {
 
 exp.listen(8888, () =>
   console.log(
-    'Acess -> http://localhost:8888/login in your browser to generate the auth code.'
+    'Access -> http://localhost:8888/login in your browser to generate the auth code.'
   )
 );
 
 exp.get('/callback', (req, res) =>{
     const code = req.query.code;
 
-    // This is the easier code flow i learned at "https://github.com/thelinmichael/spotify-web-api-node".
     spotifyApi.authorizationCodeGrant(code).then(data => {
         const access_token = data.body['access_token']
         const refresh_token = data.body['refresh_token'];
