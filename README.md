@@ -301,72 +301,71 @@ With spotifyAPI you can use this generic syntax example:
 I'll show one of my commands flow so you can fell what it should looks like
 
 ```js
-	// Command to change sound volume.
-	if (messageSensitiveLess.includes('!vol')){
-		if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
-			bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de uso restrito.`)
-		}else if(user.badges['moderator'] == '1' || user.badges['broadcaster'] === '1') {
-			var s = messageSensitiveLess.slice(4);
-		
-			if (s == "up"){
+// Command to change sound volume.
+if (messageSensitiveLess.includes('!vol')){
+	if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
+		bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de uso restrito.`)
+	}else if(user.badges['moderator'] == '1' || user.badges['broadcaster'] === '1') {
+		var s = messageSensitiveLess.slice(4);
+	
+		if (s == "up"){
 
 
 
-				(async () => {
-					spotifyApi.setAccessToken(spotifyAuthorizationCode);
-					var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
-					
-					if(volumePorcent > 90){
-						bot.say(chName, `O volume já está em 100%`);
-					} else [
-						await spotifyApi.setVolume(volumePorcent + 10)
-					]
-				})().catch(e => {
-					console.error(e)
-				})
-
-
-
-
-				console.log(`\n\n${dateTime()} - ${user.username} increased the volume at "${channel}" channel... OK`);
-			}else if (s == "down"){
-
-
-
-
-				(async () => {
-					spotifyApi.setAccessToken(spotifyAuthorizationCode);
-					var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
-					if(volumePorcent < 10){
-						bot.say(chName, `O volume já está em 0%`);
-					} else [
-						await spotifyApi.setVolume(volumePorcent - 10)
-					]
-				})().catch(e => {
-					console.error(e)
-				})
-
-
-
-
-				console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`);
-			}else [
-
-
-
-				(async () => {
-					spotifyApi.setAccessToken(spotifyAuthorizationCode);
-					await spotifyApi.setVolume(parseInt(s));
-				})().catch(e => {
-					console.error(e);
-				}),
-
-
-
+			(async () => {
+				spotifyApi.setAccessToken(spotifyAuthorizationCode);
+				var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
 				
-				console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`)
-			];
-		};
-	};
+				if(volumePorcent > 90){
+					bot.say(chName, `O volume já está em 100%`);
+				} else [
+					await spotifyApi.setVolume(volumePorcent + 10)
+				]
+			})().catch(e => {
+				console.error(e)
+			})
 
+
+
+
+			console.log(`\n\n${dateTime()} - ${user.username} increased the volume at "${channel}" channel... OK`);
+		}else if (s == "down"){
+
+
+
+
+			(async () => {
+				spotifyApi.setAccessToken(spotifyAuthorizationCode);
+				var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
+				if(volumePorcent < 10){
+					bot.say(chName, `O volume já está em 0%`);
+				} else [
+					await spotifyApi.setVolume(volumePorcent - 10)
+				]
+			})().catch(e => {
+				console.error(e)
+			})
+
+
+
+
+			console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`);
+		}else [
+
+
+
+			(async () => {
+				spotifyApi.setAccessToken(spotifyAuthorizationCode);
+				await spotifyApi.setVolume(parseInt(s));
+			})().catch(e => {
+				console.error(e);
+			}),
+
+
+
+			
+			console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`)
+		];
+	};
+};
 ```
