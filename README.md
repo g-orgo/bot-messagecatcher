@@ -304,7 +304,7 @@ I'll show one of my commands flow so you can fell what it should looks like
 // Command to change sound volume.
 if (messageSensitiveLess.includes('!vol')){
 	if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
-		bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de uso restrito.`)
+		bot.say(chName, `@${user.username}, unfortunately (for you) this is a staff-only command.`)
 	}else if(user.badges['moderator'] == '1' || user.badges['broadcaster'] === '1') {
 		var s = messageSensitiveLess.slice(4);
 	
@@ -317,7 +317,7 @@ if (messageSensitiveLess.includes('!vol')){
 				var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
 				
 				if(volumePorcent > 90){
-					bot.say(chName, `O volume já está em 100%`);
+					bot.say(chName, `Volume's already at 100%`);
 				} else [
 					await spotifyApi.setVolume(volumePorcent + 10)
 				]
@@ -338,7 +338,7 @@ if (messageSensitiveLess.includes('!vol')){
 				spotifyApi.setAccessToken(spotifyAuthorizationCode);
 				var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
 				if(volumePorcent < 10){
-					bot.say(chName, `O volume já está em 0%`);
+					bot.say(chName, `Volume's already at 0%`);
 				} else [
 					await spotifyApi.setVolume(volumePorcent - 10)
 				]
@@ -369,3 +369,4 @@ if (messageSensitiveLess.includes('!vol')){
 	};
 };
 ```
+
