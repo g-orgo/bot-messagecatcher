@@ -218,7 +218,7 @@ First you set the [scopes](https://developer.spotify.com/documentation/general/g
 
 ```
 
-Then you set the credentials of your aplication at "spotify for developer" > "[dashboard](https://developer.spotify.com/dashboard/applications)":
+Then you set the credentials of your aplication at "spotify for developer" > "[dashboard](https://developer.spotify.com/dashboard/applications)"
 
 ```js
 	var spotifyApi = new SpotifyWebApi({
