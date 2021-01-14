@@ -227,5 +227,4 @@ bot.on('chat', (channel, user, message, self) =>{
         bot.say(chName, `Estes são os comandos que eu tenho até o momento: ${commandsInfo}`);
         console.log(`\n\n${dateTime()} - Someone's asking for some help at "${channel} channel".`);
     };
-
 });
