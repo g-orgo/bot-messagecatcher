@@ -138,7 +138,7 @@ bot.on('chat', (channel, user, message, self) =>{
                     var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
                     
                     if(volumePorcent > 90){
-                        bot.say(chName, `O volume já está em 100%`);
+                        bot.say(chName, `O volume da música já está em 100%`);
                     } else [
                         await spotifyApi.setVolume(volumePorcent + 10)
                     ]
@@ -151,7 +151,7 @@ bot.on('chat', (channel, user, message, self) =>{
                     spotifyApi.setAccessToken(spotifyAuthorizationCode);
                     var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
                     if(volumePorcent < 10){
-                        bot.say(chName, `O volume já está em 0%`);
+                        bot.say(chName, `O volume da música foi retirado`);
                     } else [
                         await spotifyApi.setVolume(volumePorcent - 10)
                     ]
@@ -163,6 +163,7 @@ bot.on('chat', (channel, user, message, self) =>{
                 (async () => {
                     spotifyApi.setAccessToken(spotifyAuthorizationCode);
                     await spotifyApi.setVolume(parseInt(s));
+                    bot.say(chName, `O volume da música foi definido para ${s}`);
                 })().catch(e => {
                     console.error(e);
                 }),

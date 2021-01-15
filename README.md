@@ -26,7 +26,7 @@ First i'm gonna show a little about the twitchAPI (aka TMIJS). If you're not fam
 
 ### 1.1 Oauth flow
 
-You'll need the [oAuth](https://twitchapps.com/tmi/) code of your bot account, this authorization will give to you _just a few_ permissions for your bot account. If you want specific permissions you'll need to search a little harder, depending of what you want it will involve some request and response lines of code but i didn't and honestly you may not use those, so there's no reason to me to explain this.
+For the [oAuth](https://twitchapps.com/tmi/) flow don't forget to change to your bot account, this authorization will give to you _just a few_ permissions, but that's ok. If you want specific permissions you'll need to search a little harder, depending of what you want it will involve some request and response lines of code but i didn't that and honestly you may not use those, so there's no reason to explain this.
 
 
 This is the oauth flow:
@@ -44,7 +44,10 @@ This is the oauth flow:
 			// Yes, you need to mantain the "oauth:".
 			password: '<YOUR_OAUTH_TOKEN>'
 		},
-		// If you see my index.js file you'll notice i opted for use a variable here, but it works too.
+
+		/* If you see my index.js file you'll notice 
+		i opted for use a variable here, but if you're some kind of masochist
+		you can declare it line by line too.*/
 		channels: ['<YOUR_CHANNEL_NAME>']  
 	});
 
@@ -329,7 +332,7 @@ if (messageSensitiveLess.includes('!vol')){
 				spotifyApi.setAccessToken(spotifyAuthorizationCode);
 				var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
 				if(volumePorcent < 10){
-					bot.say(chName, `Volume's already at 0%`);
+					bot.say(chName, `Volume's already muted`);
 				} else [
 					await spotifyApi.setVolume(volumePorcent - 10)
 				]
@@ -342,6 +345,7 @@ if (messageSensitiveLess.includes('!vol')){
 			(async () => {
 				spotifyApi.setAccessToken(spotifyAuthorizationCode);
 				await spotifyApi.setVolume(parseInt(s));
+				bot.say(chName, `Volume was set to ${s}`);
 			})().catch(e => {
 				console.error(e);
 			}),
@@ -352,6 +356,9 @@ if (messageSensitiveLess.includes('!vol')){
 };
 
 ```
+
+For this command i bind "volume_percent" value from the reponse we get using [getMyCurrentPlaybackState](https://developer.spotify.com/documentation/web-api/reference/player/get-information-about-the-users-current-playback/) function in a variable called "volumePorcent" and from this i bend the flow as the requested. As long as you don't want to use all commands by request&reponse lines you'll search for they syntax at [Lin Michael repository](https://github.com/thelinmichael/spotify-web-api-node#more-examples) and study the context of it in [API endpoint reference](https://developer.spotify.com/documentation/web-api/reference/)
+
 ## 3.0 THE END
 
-Well, i didn't a lot of features in this bot since the idea behind of it was show my API knowledge. This 376 lines of text in Readme and **(231+71)** that composes MesssagecatcherBOT are finished. Peace!
+Well, i didn't a lot of features in this bot since the idea behind of it was show my API knowledge. This **(231+71)** lines of code that composes MesssagecatcherBOT are finished. Peace!
