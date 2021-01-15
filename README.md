@@ -18,7 +18,8 @@ I've created this bot to show some of my programming skills (job interview issue
 2. [SPOTIFY API](https://github.com/g-orgo/bot-messagecatcher/tree/master#20-spotify-api)
 	- [2.1 authentication](https://github.com/g-orgo/bot-messagecatcher/tree/master#21-authentication)
 		* [express](https://github.com/g-orgo/bot-messagecatcher/tree/master#express)
-	- [2.2 commands examples](https://github.com/g-orgo/bot-messagecatcher/tree/master#22-simple-command-example)
+	- [2.2 commands examples](https://github.com/g-orgo/bot-messagecatcher/tree/master#22commands-examples)
+3. [THE END](https://github.com/g-orgo/bot-messagecatcher/tree/master#30-the-end)
 
 ## 1.0 TMIJS
 First i'm gonna show a little about the twitchAPI (aka TMIJS). If you're not familiar to authentication be safe, you can check this [TMI.JS](https://tmijs.com/#example-anonymous-connection) page. They talk about all kinds of authentication flow you can use. Also, i'll try to bring some cool examples.
@@ -301,6 +302,8 @@ With spotifyAPI you can use this generic syntax example:
 I'll show one of my commands flow so you can fell what it should looks like
 
 ```js
+
+
 // Command to change sound volume.
 if (messageSensitiveLess.includes('!vol')){
 	if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
@@ -368,5 +371,8 @@ if (messageSensitiveLess.includes('!vol')){
 		];
 	};
 };
-```
 
+```
+## 3.0 THE END
+
+Well, i didn't a lot of features in this bot since the idea behind of it was show my API knowledge. This 376 lines of text in Readme and **(231+71)** that composes MesssagecatcherBOT are finished. Peace!

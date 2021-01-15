@@ -70,7 +70,6 @@ bot.on('connected', (adress, port) => {
 bot.on('chat', (channel, user, message, self) =>{
     if (self) return
 
-
     //It turns all kind of alternatives for "message" understandable.
     var messageSensitiveLess = message.toLowerCase();
 
@@ -84,8 +83,6 @@ bot.on('chat', (channel, user, message, self) =>{
             if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
                 bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de uso restrito.`)
             }else if(user.badges['moderator'] == '1' || user.badges['broadcaster'] === '1'){
-                // Here goes the only staff commands.
-
                 bot.clear(chName); // It cleans chat messages.
                 bot.say(chName, `Chat limpo. ;)`)
                 console.log(`\n\n${dateTime()} - Chat was cleared by: ${user.username}. At "${channel}" channel... OK`)
@@ -207,23 +204,27 @@ bot.on('chat', (channel, user, message, self) =>{
             })().catch(e => {
                 console.error(e)
             });
-        }
-    }
+        };
+    };
 
     if (messageSensitiveLess === '!instagram' || messageSensitiveLess === '!ig') {
+
         bot.say(chName, `O instagram dele é: ${socialMediaInfo['instagram']}.`);
         console.log(`\n\n${dateTime()} - A social media(instagram) message was send at ${channel} to @${userstate.username}... OK`);
     } else if (messageSensitiveLess === '!youtube' || messageSensitiveLess === '!yt'){
+
         bot.say(chName, `O canal no youtube dele é "${socialMediaInfo['youtube']}", mas você pode acessar clicando aqui 👇 ${socialMediaInfo['youtube_link']}`);
         console.log(`\n\n${dateTime()} - A social media(youtube) message was send at ${channel} to @${userstate.username}... OK`);
     };
 
     // Command to computerize ganks (debug reasons only).
     if (messageSensitiveLess.includes('gank') || messageSensitiveLess.includes('raid')) {
+
         console.log(`\n\n${dateTime()} - You've receive a gank/raid at: "${channel} channel".`);
     };
 
     if (messageSensitiveLess === '!help' || messageSensitiveLess === '!ajuda' || messageSensitiveLess === '!commands' || messageSensitiveLess === '!comandos'){
+
         bot.say(chName, `Estes são os comandos que eu tenho até o momento: ${commandsInfo}`);
         console.log(`\n\n${dateTime()} - Someone's asking for some help at "${channel} channel".`);
     };
