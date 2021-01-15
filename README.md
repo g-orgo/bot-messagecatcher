@@ -207,7 +207,7 @@ In this case, first of i've tried to add a value like "true" to "onCooldown" set
 
 ## 2.0 SPOTIFY API
 
-This one give me a lot of pain, differently from TMIJS it doesn't has a generic token generator and you're by you own. Actually this is ok, the worst of it is that if you want to learn something about it using nodeJS you'll need to search for people repository cause the documentation doesn't help so much. I mean, the [auth flow](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow) is very good but i just understand it for real when i searched for it [in](https://www.youtube.com/watch?v=rYDDWVuv-kI&t=1419s) [other](https://www.youtube.com/playlist?list=PLRUD_uiAYejRvQWkS2xjgFW20lRLp4snN) [places] (https://www.youtube.com/watch?v=Bk90lT6ne3g&t=235s) (they've different links).
+This one give me a lot of pain, differently from TMIJS it doesn't has a generic token generator and you're by you own. Actually this is ok, the worst of it is that if you want to learn something about it using nodeJS you'll need to search for people repository cause the documentation doesn't help so much. I mean, the [auth flow](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow) is very good but i just understand it for real when i searched for it [in](https://www.youtube.com/watch?v=rYDDWVuv-kI&t=1419s) [other](https://www.youtube.com/playlist?list=PLRUD_uiAYejRvQWkS2xjgFW20lRLp4snN) [places](https://www.youtube.com/watch?v=Bk90lT6ne3g&t=235s) (they've different links).
 
 ### 2.1 Authentication
 
