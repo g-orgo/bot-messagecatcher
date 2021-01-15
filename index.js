@@ -38,7 +38,6 @@ const onCooldown = new Set();
 const settings = {
     options:{
         clientId: 'lo87k57nqlfqg1m8xt27w4zsbbssmm',
-        debug: true
     },
     connection:{
         reconnect: true
