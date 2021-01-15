@@ -138,7 +138,7 @@ For the only-staff loop idea i did a very messy code, writing this README file i
 	}
 
 ```
-I used twitchAPI badges system to it! in the past releases of the code i was doing it that way: 
+I used twitchAPI badges system to it! This is the past releases code: 
 
 ```js
 	if (user.badges == null){
