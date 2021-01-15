@@ -288,11 +288,9 @@ With spotifyAPI you can use this generic syntax example:
 ```js
 
 	(async () => {
-
 		spotifyApi.setAccessToken("<YOUR_TOKEN>");
-		
+	
 		const me = await spotifyApi.getMe()
-
 	})().catch(e => {
 		console.error(e)
 	});
@@ -309,12 +307,9 @@ if (messageSensitiveLess.includes('!vol')){
 	if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
 		bot.say(chName, `@${user.username}, unfortunately (for you) this is a staff-only command.`)
 	}else if(user.badges['moderator'] == '1' || user.badges['broadcaster'] === '1') {
+		
 		var s = messageSensitiveLess.slice(4);
-	
 		if (s == "up"){
-
-
-
 			(async () => {
 				spotifyApi.setAccessToken(spotifyAuthorizationCode);
 				var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
@@ -328,15 +323,8 @@ if (messageSensitiveLess.includes('!vol')){
 				console.error(e)
 			})
 
-
-
-
 			console.log(`\n\n${dateTime()} - ${user.username} increased the volume at "${channel}" channel... OK`);
 		}else if (s == "down"){
-
-
-
-
 			(async () => {
 				spotifyApi.setAccessToken(spotifyAuthorizationCode);
 				var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
@@ -349,14 +337,8 @@ if (messageSensitiveLess.includes('!vol')){
 				console.error(e)
 			})
 
-
-
-
 			console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`);
 		}else [
-
-
-
 			(async () => {
 				spotifyApi.setAccessToken(spotifyAuthorizationCode);
 				await spotifyApi.setVolume(parseInt(s));
@@ -364,9 +346,6 @@ if (messageSensitiveLess.includes('!vol')){
 				console.error(e);
 			}),
 
-
-
-			
 			console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`)
 		];
 	};
