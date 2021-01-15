@@ -58,7 +58,7 @@ bot.connect().catch(function(err){
 })
 //Setting up spotifyAPI variable and token.
 var spotifyApi = new SpotifyWebApi();
-var spotifyAuthorizationCode = "BQA3DgAycVAh5AAYic2_89w99FY-bYUkCLsDQyM3AYwVvqoIR7bQ9FcTrhicYS_4NeYn18tEjwnaDiIya37rPp3r4TXVcxKYhL35oiwKBPxYAGFlMDLivhAFrMaz9j1ivrS-OEelhCJTjT-FFjTRvmrqwk18kBRhLe6Y1Rlrjg63XWl8eJQeTg-zgKm5lwkAXA10E76NV7umIv6X2Vw8Elr9btBeQGb28yoYojkDLD8nX7o2fAphnOujtkpKs_gv9E86HWaS7OQKNZi41j_n5e1d"
+var spotifyAuthorizationCode = "BQCRnvA5q2t38TP7kt4uauIlRirTSXXAAOl4anpBKekvNkmC-cHArM5Oi8OO_FTpO2kau54YZ3m2AoF80jJkIsUNi4gW8Rgwkkrnkk9IpVHzyP1f0lR0otLzgJ2qym3nFr2QxPL58-4gP0Bs1rRv3eG_HFlESonXjldE0jmD0R8Yy_oF4OyCoRuLcmCQoIM7zvsJCTrL0nLWN6WPrkakXQUiblfX-PClXUhjp-c_s6t3jWe0_UXghZsr23fiXtq3jkjqjQberUZKv_QB"
 
 // Send a message when connected.
 bot.on('connected', (adress, port) => {
@@ -210,11 +210,11 @@ bot.on('chat', (channel, user, message, self) =>{
     if (messageSensitiveLess === '!instagram' || messageSensitiveLess === '!ig') {
 
         bot.say(chName, `O instagram dele é: ${socialMediaInfo['instagram']}.`);
-        console.log(`\n\n${dateTime()} - A social media(instagram) message was send at ${channel} to @${userstate.username}... OK`);
+        console.log(`\n\n${dateTime()} - A social media(instagram) message was send at ${channel} to @${user.username}... OK`);
     } else if (messageSensitiveLess === '!youtube' || messageSensitiveLess === '!yt'){
 
         bot.say(chName, `O canal no youtube dele é "${socialMediaInfo['youtube']}", mas você pode acessar clicando aqui 👇 ${socialMediaInfo['youtube_link']}`);
-        console.log(`\n\n${dateTime()} - A social media(youtube) message was send at ${channel} to @${userstate.username}... OK`);
+        console.log(`\n\n${dateTime()} - A social media(youtube) message was send at ${channel} to @${user.username}... OK`);
     };
 
     // Command to computerize ganks (debug reasons only).
