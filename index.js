@@ -28,7 +28,6 @@ function dateTime(){
     today = '[ ' + dd + '/' + mm + '/' + yyyy + " | " + hh + ':' + min + ':' + ss + ' ]'
     return today
 }
-setInterval(dateTime, 1000) //This will refresh the time second after second.
 
 // Create a scope to eventually set any cooldown time to the command.
 const onCooldown = new Set();
@@ -108,9 +107,9 @@ bot.on('chat', (channel, user, message, self) =>{
                     const playingState = await spotifyApi.getMyCurrentPlaybackState();
                     if(playingState.body.is_playing == false){ 
                         await spotifyApi.play();
-                    }else[
+                    }else{
                         await spotifyApi.pause()
-                    ]
+                    }
                 })().catch(e => {
                     console.error(e)
                 });
@@ -138,9 +137,9 @@ bot.on('chat', (channel, user, message, self) =>{
                     
                     if(volumePorcent > 90){
                         bot.say(chName, `O volume da música já está em 100%`);
-                    } else [
+                    } else {
                         await spotifyApi.setVolume(volumePorcent + 10)
-                    ]
+                    }
                 })().catch(e => {
                     console.error(e)
                 })
@@ -158,16 +157,16 @@ bot.on('chat', (channel, user, message, self) =>{
                     console.error(e)
                 })
                 console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`);
-            }else [
+            }else {
                 (async () => {
                     spotifyApi.setAccessToken(spotifyAuthorizationCode);
                     await spotifyApi.setVolume(parseInt(s));
                     bot.say(chName, `O volume da música foi definido para ${s}`);
                 })().catch(e => {
                     console.error(e);
-                }),
-                console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`)
-            ];
+                });
+                console.log(`\n\n${dateTime()} - ${user.username} decreased the volume at "${channel}" channel... OK`);
+            };
         };
     };
 
