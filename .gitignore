@@ -1,7 +1,5 @@
-launch.json
-dist
-.idea
 .vscode
 .git
 /tutorial
 /node_modules
+credentials.js

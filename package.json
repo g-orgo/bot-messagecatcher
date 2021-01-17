@@ -4,15 +4,18 @@
   "description": "my first attempt to create a bot",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "author": "Orgo",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "opn": "^6.0.0",
     "request": "^2.88.2",
     "spotify-web-api-node": "^5.0.0",
     "tmi.js": "^1.5.0"
+  },
+  "devDependencies": {
+    "@types/opn": "^5.5.0"
   }
 }

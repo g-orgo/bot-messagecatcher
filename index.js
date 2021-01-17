@@ -1,6 +1,7 @@
 // Calling up TMI and Spotify api.
 const twitchApi = require('tmi.js');
 const SpotifyWebApi = require('spotify-web-api-node');
+const credentials = require('./credentials')
 
 // I'm creating this section of variables to make channel bind and other functions easier.
 const chName = 'caruso323';
@@ -36,14 +37,14 @@ const onCooldown = new Set();
     Also doing the authentication for tmiAPI */
 const settings = {
     options:{
-        clientId: 'lo87k57nqlfqg1m8xt27w4zsbbssmm',
+        clientId: credentials.twitch_clientId,
     },
     connection:{
         reconnect: true
     },
     identity:{
         username: 'messagecatcherbot',
-        password: 'oauth:lk749h7as68w4bnpgw1e4ac7wzzxo2'
+        password: credentials.twitch_pass
     },
     channels: [
         chName,
@@ -57,7 +58,7 @@ bot.connect().catch(function(err){
 })
 //Setting up spotifyAPI variable and token.
 var spotifyApi = new SpotifyWebApi();
-var spotifyAuthorizationCode = "BQCRnvA5q2t38TP7kt4uauIlRirTSXXAAOl4anpBKekvNkmC-cHArM5Oi8OO_FTpO2kau54YZ3m2AoF80jJkIsUNi4gW8Rgwkkrnkk9IpVHzyP1f0lR0otLzgJ2qym3nFr2QxPL58-4gP0Bs1rRv3eG_HFlESonXjldE0jmD0R8Yy_oF4OyCoRuLcmCQoIM7zvsJCTrL0nLWN6WPrkakXQUiblfX-PClXUhjp-c_s6t3jWe0_UXghZsr23fiXtq3jkjqjQberUZKv_QB"
+var spotifyAuthorizationCode = credentials.spotify_access_token
 
 // Send a message when connected.
 bot.on('connected', (adress, port) => {
@@ -77,7 +78,7 @@ bot.on('chat', (channel, user, message, self) =>{
         if (onCooldown.has(messageSensitiveLess)){
             bot.say(chName, `Comando em tempo de recarga, aguarde uns segundos antes de tentar novamente.`)
         }else {
-            // Doing a permission's loop for only staff commands.
+            // Doing a permission'search loop for only staff commands.
             if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
                 bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de uso restrito.`)
             }else if(user.badges['moderator'] == '1' || user.badges['broadcaster'] === '1'){
@@ -94,7 +95,7 @@ bot.on('chat', (channel, user, message, self) =>{
     };
 
     // Command to pause/resume music.
-    if (messageSensitiveLess === '!music_p' || messageSensitiveLess === '!play'){
+    if (messageSensitiveLess === '!p' || messageSensitiveLess === '!play'){
         if (onCooldown.has(messageSensitiveLess)){
             bot.say(chName, `Comando em tempo de recarga, aguarde uns segundos antes de tentar novamente.`)
         }else {
@@ -118,7 +119,7 @@ bot.on('chat', (channel, user, message, self) =>{
                 onCooldown.add(messageSensitiveLess)
                 setTimeout(()=>{
                     onCooldown.delete(messageSensitiveLess)
-                }, 3000);
+                }, 5000);
             };
         };
     };
@@ -128,9 +129,9 @@ bot.on('chat', (channel, user, message, self) =>{
         if (user.badges == null || user.badges['broadcaster'] != '1' && user.mod == false){
             bot.say(chName, `@${user.username}, infelizmente (pra ti) este é um comando de uso restrito.`)
         }else if(user.badges['moderator'] == '1' || user.badges['broadcaster'] === '1') {
-            var s = messageSensitiveLess.slice(4);
+            var search = messageSensitiveLess.slice(4);
         
-            if (s == "up"){
+            if (search == "up"){
                 (async () => {
                     spotifyApi.setAccessToken(spotifyAuthorizationCode);
                     var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
@@ -144,7 +145,7 @@ bot.on('chat', (channel, user, message, self) =>{
                     console.error(e)
                 })
                 console.log(`\n\n${dateTime()} - ${user.username} increased the volume at "${channel}" channel... OK`);
-            }else if (s == "down"){
+            }else if (search == "down"){
                 (async () => {
                     spotifyApi.setAccessToken(spotifyAuthorizationCode);
                     var volumePorcent = (await spotifyApi.getMyCurrentPlaybackState()).body.device.volume_percent;
@@ -160,8 +161,8 @@ bot.on('chat', (channel, user, message, self) =>{
             }else {
                 (async () => {
                     spotifyApi.setAccessToken(spotifyAuthorizationCode);
-                    await spotifyApi.setVolume(parseInt(s));
-                    bot.say(chName, `O volume da música foi definido para ${s}`);
+                    await spotifyApi.setVolume(parseInt(search));
+                    bot.say(chName, `O volume da música foi definido para ${search}`);
                 })().catch(e => {
                     console.error(e);
                 });
@@ -171,7 +172,7 @@ bot.on('chat', (channel, user, message, self) =>{
     };
 
     if(messageSensitiveLess.includes('!sr')){
-        var s = messageSensitiveLess.slice(4);
+        var search = messageSensitiveLess.slice(4);
 
         if (messageSensitiveLess.slice(3,4) == " "){
             (async () => {
@@ -179,14 +180,14 @@ bot.on('chat', (channel, user, message, self) =>{
 
                 var songArray = []
                 var count = 0
-                const songList = await (await (spotifyApi.searchTracks(s))).body.tracks.items
+                const songList = await (await (spotifyApi.searchTracks(search))).body.tracks.items
     
                 while (songArray.length < 5){
                     songArray.push(` [${count+1}]${songList[count].name} - ${songList[count].artists[0].name}`)
                     ++count
                 }
     
-                bot.say(chName, `Achei isso no spotify: ${songArray}. Agora tu acrescenta o número escolhido depois do !sr (exemplo: !sr1 ${s})`)
+                bot.say(chName, `Achei isso no spotify: ${songArray}. Agora tu acrescenta o número escolhido depois do !sr (exemplo: !sr1 ${search})`)
             })().catch(e => {
                 console.error(e)
             })
@@ -195,7 +196,7 @@ bot.on('chat', (channel, user, message, self) =>{
             (async () => {
                 spotifyApi.setAccessToken(spotifyAuthorizationCode);
                 
-                const songRequested = await (await (spotifyApi.searchTracks(s))).body.tracks.items[sInt-1]
+                const songRequested = await (await (spotifyApi.searchTracks(search))).body.tracks.items[sInt-1]
                 await spotifyApi.addToQueue([songRequested.uri])
 
                 console.log(`\n\n${dateTime()} - ${user.username} requested a song (${songRequested.name} - ${songRequested.artists[0].name}) at "${channel}" channel... OK`)
@@ -225,6 +226,6 @@ bot.on('chat', (channel, user, message, self) =>{
     if (messageSensitiveLess === '!help' || messageSensitiveLess === '!ajuda' || messageSensitiveLess === '!commands' || messageSensitiveLess === '!comandos'){
 
         bot.say(chName, `Estes são os comandos que eu tenho até o momento: ${commandsInfo}`);
-        console.log(`\n\n${dateTime()} - Someone's asking for some help at "${channel} channel".`);
+        console.log(`\n\n${dateTime()} - Someone'search asking for some help at "${channel} channel".`);
     };
 });
