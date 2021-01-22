@@ -176,7 +176,6 @@ function dateTime(){
     today = '[ ' + dd + '/' + mm + '/' + yyyy + " | " + hh + ':' + min + ':' + ss + ' ]'
     return today
 }
-setInterval(dateTime, 1000)
 
 ```
 
